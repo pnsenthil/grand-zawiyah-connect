@@ -18,11 +18,11 @@ All colors MUST be HSL.
     --popover-foreground: 210 6% 12%;
 
     /* Grand Zawiyah Brand Colors */
-    --primary: 84 46% 15%;        /* Forest Green #2D5016 */
+    --primary: 154 65% 45%;       /* Bright Green #28bd69 */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 84 46% 25%;   /* Lighter version for hover */
+    --primary-glow: 154 65% 55%;  /* Lighter version for hover */
 
-    --secondary: 84 42% 38%;      /* Sage Green #6B8E3A */
+    --secondary: 154 45% 35%;     /* Darker Green */
     --secondary-foreground: 0 0% 100%;
 
     --accent: 84 46% 92%;         /* Light Green #E8F5E8 */
@@ -80,11 +80,11 @@ All colors MUST be HSL.
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 84 46% 25%;        /* Lighter green for dark mode */
+    --primary: 154 65% 55%;       /* Lighter green for dark mode */
     --primary-foreground: 222.2 84% 4.9%;
-    --primary-glow: 84 46% 35%;
+    --primary-glow: 154 65% 65%;
 
-    --secondary: 84 42% 45%;
+    --secondary: 154 45% 45%;
     --secondary-foreground: 222.2 84% 4.9%;
 
     --accent: 217.2 32.6% 17.5%;

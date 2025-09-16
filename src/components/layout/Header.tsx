@@ -7,10 +7,10 @@ const Header = () => {
 
   const navigationItems = [
     { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
-    { label: "Donations", href: "/donations" },
+    { label: "Dashboard", href: "/dashboard" },
     { label: "Lessons", href: "/lessons" },
-    { label: "Community", href: "/community" },
+    { label: "Donate", href: "/donate" },
+    { label: "Events", href: "/events" },
     { label: "Contact", href: "/contact" },
   ];
 
