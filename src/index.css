@@ -2,57 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Grand Zawiyah Design System - Inspired by Islamic heritage and modern charity design
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 210 6% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 6% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 6% 12%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Grand Zawiyah Brand Colors */
+    --primary: 84 46% 15%;        /* Forest Green #2D5016 */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 84 46% 25%;   /* Lighter version for hover */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 84 42% 38%;      /* Sage Green #6B8E3A */
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 84 46% 92%;         /* Light Green #E8F5E8 */
+    --accent-foreground: 84 46% 15%;
+
+    /* Legacy Purple Colors */
+    --legacy: 251 69% 52%;        /* Royal Purple #6B46C1 */
+    --legacy-foreground: 0 0% 100%;
+    --legacy-light: 243 75% 91%;  /* Light Purple #E0E7FF */
+    --legacy-dark: 251 88% 35%;   /* Deep Purple #4C1D95 */
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 84 46% 15%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Grand Zawiyah Custom Design Elements */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.95), hsl(var(--legacy) / 0.85));
+    --gradient-accent: linear-gradient(180deg, hsl(var(--accent)), hsl(var(--background)));
+    
+    /* Islamic-inspired shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
+    --shadow-card: 0 4px 20px -4px hsl(210 10% 0% / 0.1);
+
+    /* Animation timing */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-primary: 84 46% 15%;
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 84 46% 15%;
   }
 
   .dark {
@@ -65,32 +80,44 @@ All colors MUST be HSL.
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 84 46% 25%;        /* Lighter green for dark mode */
+    --primary-foreground: 222.2 84% 4.9%;
+    --primary-glow: 84 46% 35%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --secondary: 84 42% 45%;
+    --secondary-foreground: 222.2 84% 4.9%;
 
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
+
+    --legacy: 251 69% 65%;        /* Lighter purple for dark mode */
+    --legacy-foreground: 222.2 84% 4.9%;
+    --legacy-light: 243 75% 20%;
+    --legacy-dark: 251 88% 50%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --ring: 84 46% 25%;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.9), hsl(var(--legacy) / 0.8));
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.5);
+    
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary: 84 46% 25%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 84 46% 25%;
   }
 }
 
@@ -100,6 +127,86 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  /* Islamic geometric patterns and animations */
+  .geometric-pattern {
+    background-image: 
+      radial-gradient(circle at 25px 25px, hsl(var(--primary) / 0.1) 2px, transparent 2px),
+      radial-gradient(circle at 75px 75px, hsl(var(--accent-foreground) / 0.05) 1px, transparent 1px);
+    background-size: 100px 100px;
+  }
+
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .card-elegant {
+    background: hsl(var(--card));
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+  }
+
+  .card-elegant:hover {
+    box-shadow: var(--shadow-elegant);
+    transform: translateY(-2px);
+  }
+
+  /* Smooth animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Counter animation */
+  .counter-animate {
+    display: inline-block;
+    transition: var(--transition-bounce);
+  }
+
+  /* Islamic calligraphy style elements */
+  .calligraphy-accent {
+    position: relative;
+  }
+
+  .calligraphy-accent::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transition: var(--transition-smooth);
+  }
+
+  .calligraphy-accent:hover::before {
+    transform: scaleX(1);
   }
 }
