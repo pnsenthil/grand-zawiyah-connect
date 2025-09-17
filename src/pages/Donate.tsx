@@ -1,12 +1,16 @@
-import { useState } from "react";
+import React from 'react';
+import { Header } from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { RoundUpGiving } from '@/components/financial/RoundUpGiving';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Heart, CreditCard, Calendar, Target, Users, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 const predefinedAmounts = [25, 50, 100, 250, 500, 1000];
 
@@ -85,7 +89,7 @@ const DonationForm = () => {
           {predefinedAmounts.map(amount => (
             <Button
               key={amount}
-              variant={selectedAmount === amount ? "primary" : "outline"}
+              variant={selectedAmount === amount ? "default" : "outline"}
               onClick={() => handleAmountSelect(amount)}
               className="h-12"
             >
@@ -118,8 +122,8 @@ const DonationForm = () => {
 
       {/* Impact Preview */}
       {getCurrentAmount() > 0 && (
-        <div className="mb-6 p-4 bg-accent rounded-lg">
-          <h4 className="font-medium text-accent-foreground mb-2">Your Impact</h4>
+        <div className="mb-6 p-4 bg-accent/10 rounded-lg">
+          <h4 className="font-medium mb-2">Your Impact</h4>
           <p className="text-sm text-muted-foreground">
             Your ${getCurrentAmount()} {frequency === 'monthly' ? 'monthly' : frequency === 'annual' ? 'annual' : ''} donation will help:
           </p>
@@ -131,7 +135,7 @@ const DonationForm = () => {
         </div>
       )}
 
-      <Button variant="primary" size="lg" className="w-full" disabled={getCurrentAmount() === 0}>
+      <Button size="lg" className="w-full" disabled={getCurrentAmount() === 0}>
         <CreditCard className="h-5 w-5 mr-2" />
         Donate ${getCurrentAmount() || 0} {frequency !== 'one-time' ? `/${frequency.replace('ly', '')}` : ''}
       </Button>
@@ -139,137 +143,71 @@ const DonationForm = () => {
   );
 };
 
-const CampaignCard = ({ campaign }: { campaign: typeof campaigns[0] }) => {
-  const progressPercentage = (campaign.raised / campaign.goal) * 100;
-
-  return (
-    <Card className="p-6 card-elegant">
-      <h3 className="text-xl font-semibold mb-2">{campaign.name}</h3>
-      <p className="text-muted-foreground mb-4">{campaign.description}</p>
-      
-      <div className="mb-4">
-        <div className="flex justify-between text-sm mb-2">
-          <span className="font-medium">${campaign.raised.toLocaleString()} raised</span>
-          <span className="text-muted-foreground">${campaign.goal.toLocaleString()} goal</span>
-        </div>
-        <div className="w-full bg-muted rounded-full h-3">
-          <div 
-            className="bg-gradient-primary h-3 rounded-full transition-all duration-300"
-            style={{ width: `${Math.min(progressPercentage, 100)}%` }}
-          />
-        </div>
-        <div className="flex justify-between text-sm mt-2">
-          <span className="text-primary font-medium">{progressPercentage.toFixed(1)}% complete</span>
-          <span className="text-muted-foreground">{campaign.donors} donors</span>
-        </div>
-      </div>
-      
-      <Button variant="primary" className="w-full">
-        <Heart className="h-4 w-4 mr-2" />
-        Donate Now
-      </Button>
-    </Card>
-  );
-};
-
-const Donate = () => {
+export default function Donate() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <section className="py-16 bg-gradient-hero text-primary-foreground">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Support Our Mission
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 opacity-90">
-              Help us build the Grand Zawiyah and continue spreading the teachings of Islam
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-lg">
-              <Badge variant="secondary" className="px-4 py-2">
-                <Target className="h-5 w-5 mr-2" />
-                Goal: $750,000
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <Users className="h-5 w-5 mr-2" />
-                579 Donors
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <Clock className="h-5 w-5 mr-2" />
-                6 Months Left
-              </Badge>
-            </div>
-          </div>
+      <Header />
+      <main className="container mx-auto px-4 py-12">
+        <div className="text-center space-y-4 mb-12">
+          <h1 className="text-4xl font-bold">Support Our Mission</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Your generous donations help us build a stronger community and continue our spiritual journey together.
+          </p>
         </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Donation Form */}
-            <div className="lg:col-span-1">
+        
+        <Tabs defaultValue="one-time" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="one-time">One-Time</TabsTrigger>
+            <TabsTrigger value="recurring">Recurring</TabsTrigger>
+            <TabsTrigger value="round-up">Round-Up</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="one-time" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <DonationForm />
-              
-              {/* Quick Stats */}
-              <Card className="p-6 mt-6">
-                <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">This Month</span>
-                    <span className="font-medium">$12,450</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Raised</span>
-                    <span className="font-medium">$248,000</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Avg. Donation</span>
-                    <span className="font-medium">$86</span>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Campaign Cards */}
-            <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold mb-6">Active Campaigns</h2>
               <div className="space-y-6">
-                {campaigns.map(campaign => (
-                  <CampaignCard key={campaign.id} campaign={campaign} />
-                ))}
+                {campaigns.map(campaign => {
+                  const progressPercentage = (campaign.raised / campaign.goal) * 100;
+                  return (
+                    <Card key={campaign.id} className="p-6">
+                      <h3 className="text-xl font-semibold mb-2">{campaign.name}</h3>
+                      <p className="text-muted-foreground mb-4">{campaign.description}</p>
+                      
+                      <div className="mb-4">
+                        <div className="flex justify-between text-sm mb-2">
+                          <span className="font-medium">${campaign.raised.toLocaleString()} raised</span>
+                          <span className="text-muted-foreground">${campaign.goal.toLocaleString()} goal</span>
+                        </div>
+                        <div className="w-full bg-muted rounded-full h-3">
+                          <div 
+                            className="bg-primary h-3 rounded-full transition-all duration-300"
+                            style={{ width: `${Math.min(progressPercentage, 100)}%` }}
+                          />
+                        </div>
+                        <div className="flex justify-between text-sm mt-2">
+                          <span className="text-primary font-medium">{progressPercentage.toFixed(1)}% complete</span>
+                          <span className="text-muted-foreground">{campaign.donors} donors</span>
+                        </div>
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
-              
-              {/* Recurring Donation Benefits */}
-              <Card className="p-6 mt-8 bg-gradient-accent">
-                <h3 className="text-xl font-semibold mb-4">Why Choose Recurring Donations?</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                      <Calendar className="h-4 w-4 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Consistent Impact</h4>
-                      <p className="text-sm text-muted-foreground">Regular support helps us plan long-term projects</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                      <Heart className="h-4 w-4 text-primary-foreground" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Automatic Giving</h4>
-                      <p className="text-sm text-muted-foreground">Set it once and continue your charitable impact</p>
-                    </div>
-                  </div>
-                </div>
-              </Card>
             </div>
-          </div>
-        </div>
-      </section>
+          </TabsContent>
+          
+          <TabsContent value="recurring" className="space-y-6">
+            <div className="text-center py-20">
+              <p className="text-muted-foreground">Recurring donation setup coming soon...</p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="round-up" className="space-y-6">
+            <RoundUpGiving />
+          </TabsContent>
+        </Tabs>
+      </main>
+      <Footer />
     </div>
   );
-};
-
-export default Donate;
+}
