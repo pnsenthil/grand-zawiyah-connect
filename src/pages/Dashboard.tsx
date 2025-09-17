@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Header } from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import { 
   TrendingUp, 
   Heart, 
@@ -107,6 +109,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       {/* Header */}
       <section className="py-16 bg-gradient-hero text-primary-foreground">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -410,6 +413,7 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -53,16 +53,16 @@ const FeaturesSection = () => {
       case "primary":
         return "text-primary bg-primary/10 border-primary/20";
       case "legacy":
-        return "text-legacy bg-legacy/10 border-legacy/20";
+        return "text-primary bg-primary/10 border-primary/20";
       case "secondary":
-        return "text-secondary bg-secondary/10 border-secondary/20";
+        return "text-primary bg-primary/10 border-primary/20";
       default:
         return "text-primary bg-primary/10 border-primary/20";
     }
   };
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
@@ -71,9 +71,9 @@ const FeaturesSection = () => {
               Platform Features
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
             Everything You Need for{" "}
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-legacy bg-clip-text text-transparent">
               Spiritual Growth
             </span>
           </h2>

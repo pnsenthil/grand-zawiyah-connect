@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { EventDetails } from '@/components/events/EventDetails';
 
 interface CommunityResource {
   id: string;
@@ -30,6 +31,7 @@ interface CommunityMember {
 
 export function CommunityHub() {
   const [activeTab, setActiveTab] = useState('resources');
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
   const mockResources: CommunityResource[] = [
     {
@@ -124,9 +126,9 @@ export function CommunityHub() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
+    <div className="container mx-auto p-6 space-y-8 bg-white">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">Community Hub</h1>
+        <h1 className="text-4xl font-bold text-black">Community Hub</h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Connect with fellow community members, find opportunities, and support each other 
           in our shared journey of faith and growth.
@@ -134,16 +136,17 @@ export function CommunityHub() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="resources">Resources</TabsTrigger>
           <TabsTrigger value="members">Members</TabsTrigger>
           <TabsTrigger value="discussions">Discussions</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
+          <TabsTrigger value="event-details">Event Details</TabsTrigger>
         </TabsList>
 
         <TabsContent value="resources" className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold">Community Resources</h2>
+            <h2 className="text-2xl font-semibold text-black">Community Resources</h2>
             <Button>Post Resource</Button>
           </div>
 
@@ -197,7 +200,7 @@ export function CommunityHub() {
 
         <TabsContent value="members" className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold">Community Members</h2>
+            <h2 className="text-2xl font-semibold text-black">Community Members</h2>
             <Button>Join Community</Button>
           </div>
 
@@ -245,7 +248,7 @@ export function CommunityHub() {
 
         <TabsContent value="discussions" className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold">Community Discussions</h2>
+            <h2 className="text-2xl font-semibold text-black">Community Discussions</h2>
             <Button>Start Discussion</Button>
           </div>
 
@@ -299,7 +302,7 @@ export function CommunityHub() {
 
         <TabsContent value="events" className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold">Upcoming Community Events</h2>
+            <h2 className="text-2xl font-semibold text-black">Upcoming Community Events</h2>
             <Button>Create Event</Button>
           </div>
 
@@ -344,9 +347,21 @@ export function CommunityHub() {
                           <Users className="h-4 w-4" />
                           {event.attendees} attending
                         </div>
-                        <Button variant="outline" size="sm">
-                          RSVP
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button variant="outline" size="sm">
+                            RSVP
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => {
+                              setSelectedEvent(event);
+                              setActiveTab('event-details');
+                            }}
+                          >
+                            Details
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -354,6 +369,10 @@ export function CommunityHub() {
               </Card>
             ))}
           </div>
+        </TabsContent>
+
+        <TabsContent value="event-details" className="space-y-6">
+          <EventDetails event={selectedEvent} />
         </TabsContent>
       </Tabs>
     </div>
