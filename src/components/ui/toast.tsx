@@ -1,111 +1,328 @@
-import * as React from "react";
-import * as ToastPrimitives from "@radix-ui/react-toast";
-import { cva, type VariantProps } from "class-variance-authority";
-import { X } from "lucide-react";
+// Toast Component for Grand Zawiyah
+// Provides a comprehensive toast notification system
 
-import { cn } from "@/lib/utils";
+import React, { useEffect, useState } from 'react';
+import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { globalToastManager, ToastState } from '@/utils/stateManagement';
 
-const ToastProvider = ToastPrimitives.Provider;
+interface ToastProps {
+  toast: ToastState;
+  onRemove: (id: string) => void;
+}
 
-const ToastViewport = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Viewport>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Viewport
-    ref={ref}
-    className={cn(
-      "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
-      className,
-    )}
-    {...props}
-  />
-));
-ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
+const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
-const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
-  {
-    variants: {
-      variant: {
-        default: "border bg-background text-foreground",
-        destructive: "destructive group border-destructive bg-destructive text-destructive-foreground",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  },
-);
+  useEffect(() => {
+    // Animate in
+    const timer = setTimeout(() => setIsVisible(true), 10);
+    return () => clearTimeout(timer);
+  }, []);
 
-const Toast = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> & VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
-  return <ToastPrimitives.Root ref={ref} className={cn(toastVariants({ variant }), className)} {...props} />;
-});
-Toast.displayName = ToastPrimitives.Root.displayName;
+  const handleRemove = () => {
+    setIsLeaving(true);
+    setTimeout(() => onRemove(toast.id), 300);
+  };
 
-const ToastAction = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Action>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Action
-    ref={ref}
-    className={cn(
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors group-[.destructive]:border-muted/40 hover:bg-secondary group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 group-[.destructive]:focus:ring-destructive disabled:pointer-events-none disabled:opacity-50",
-      className,
-    )}
-    {...props}
-  />
-));
-ToastAction.displayName = ToastPrimitives.Action.displayName;
+  const getIcon = () => {
+    switch (toast.type) {
+      case 'success':
+        return <CheckCircle className="h-5 w-5 text-green-600" />;
+      case 'error':
+        return <AlertCircle className="h-5 w-5 text-red-600" />;
+      case 'warning':
+        return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
+      case 'info':
+        return <Info className="h-5 w-5 text-blue-600" />;
+      default:
+        return <Info className="h-5 w-5 text-gray-600" />;
+    }
+  };
 
-const ToastClose = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Close>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Close
-    ref={ref}
-    className={cn(
-      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity group-hover:opacity-100 group-[.destructive]:text-red-300 hover:text-foreground group-[.destructive]:hover:text-red-50 focus:opacity-100 focus:outline-none focus:ring-2 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
-      className,
-    )}
-    toast-close=""
-    {...props}
-  >
-    <X className="h-4 w-4" />
-  </ToastPrimitives.Close>
-));
-ToastClose.displayName = ToastPrimitives.Close.displayName;
+  const getBackgroundColor = () => {
+    switch (toast.type) {
+      case 'success':
+        return 'bg-green-50 border-green-200';
+      case 'error':
+        return 'bg-red-50 border-red-200';
+      case 'warning':
+        return 'bg-yellow-50 border-yellow-200';
+      case 'info':
+        return 'bg-blue-50 border-blue-200';
+      default:
+        return 'bg-gray-50 border-gray-200';
+    }
+  };
 
-const ToastTitle = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Title>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Title ref={ref} className={cn("text-sm font-semibold", className)} {...props} />
-));
-ToastTitle.displayName = ToastPrimitives.Title.displayName;
-
-const ToastDescription = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Description>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Description ref={ref} className={cn("text-sm opacity-90", className)} {...props} />
-));
-ToastDescription.displayName = ToastPrimitives.Description.displayName;
-
-type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
-
-type ToastActionElement = React.ReactElement<typeof ToastAction>;
-
-export {
-  type ToastProps,
-  type ToastActionElement,
-  ToastProvider,
-  ToastViewport,
-  Toast,
-  ToastTitle,
-  ToastDescription,
-  ToastClose,
-  ToastAction,
+  return (
+    <div
+      className={cn(
+        'relative flex items-start gap-3 p-4 rounded-lg border shadow-lg transition-all duration-300 ease-in-out',
+        getBackgroundColor(),
+        isVisible && !isLeaving ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0',
+        'min-w-[320px] max-w-md'
+      )}
+      role="alert"
+      aria-live="polite"
+    >
+      <div className="flex-shrink-0 mt-0.5">
+        {getIcon()}
+      </div>
+      
+      <div className="flex-1 min-w-0">
+        <h4 className="text-sm font-semibold text-gray-900 mb-1">
+          {toast.title}
+        </h4>
+        {toast.description && (
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {toast.description}
+          </p>
+        )}
+        {toast.action && (
+          <div className="mt-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toast.action.onClick}
+              className="text-xs"
+            >
+              {toast.action.label}
+            </Button>
+          </div>
+        )}
+      </div>
+      
+      <button
+        onClick={handleRemove}
+        className="flex-shrink-0 p-1 rounded-md hover:bg-gray-100 transition-colors"
+        aria-label="Close notification"
+      >
+        <X className="h-4 w-4 text-gray-500" />
+      </button>
+    </div>
+  );
 };
+
+interface ToastContainerProps {
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center';
+  maxToasts?: number;
+}
+
+const ToastContainer: React.FC<ToastContainerProps> = ({ 
+  position = 'top-right',
+  maxToasts = 5 
+}) => {
+  const [toasts, setToasts] = useState<ToastState[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = globalToastManager.subscribe((newToasts) => {
+      setToasts(newToasts.slice(-maxToasts));
+    });
+
+    return unsubscribe;
+  }, [maxToasts]);
+
+  const handleRemove = (id: string) => {
+    globalToastManager.removeToast(id);
+  };
+
+  const getPositionClasses = () => {
+    switch (position) {
+      case 'top-right':
+        return 'top-4 right-4';
+      case 'top-left':
+        return 'top-4 left-4';
+      case 'bottom-right':
+        return 'bottom-4 right-4';
+      case 'bottom-left':
+        return 'bottom-4 left-4';
+      case 'top-center':
+        return 'top-4 left-1/2 transform -translate-x-1/2';
+      case 'bottom-center':
+        return 'bottom-4 left-1/2 transform -translate-x-1/2';
+      default:
+        return 'top-4 right-4';
+    }
+  };
+
+  if (toasts.length === 0) return null;
+
+  return (
+    <div
+      className={cn(
+        'fixed z-50 flex flex-col gap-2 pointer-events-none',
+        getPositionClasses()
+      )}
+      aria-live="polite"
+      aria-label="Notifications"
+    >
+      {toasts.map((toast) => (
+        <div key={toast.id} className="pointer-events-auto">
+          <Toast toast={toast} onRemove={handleRemove} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Hook for using toasts in components
+export const useToast = () => {
+  return {
+    success: (title: string, description?: string, duration?: number) =>
+      globalToastManager.success(title, description, duration),
+    error: (title: string, description?: string, duration?: number) =>
+      globalToastManager.error(title, description, duration),
+    warning: (title: string, description?: string, duration?: number) =>
+      globalToastManager.warning(title, description, duration),
+    info: (title: string, description?: string, duration?: number) =>
+      globalToastManager.info(title, description, duration),
+    remove: (id: string) => globalToastManager.removeToast(id),
+    clearAll: () => globalToastManager.clearAll()
+  };
+};
+
+// Loading Spinner Component
+interface LoadingSpinnerProps {
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  text?: string;
+}
+
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
+  size = 'md', 
+  className,
+  text 
+}) => {
+  const sizeClasses = {
+    sm: 'h-4 w-4',
+    md: 'h-6 w-6',
+    lg: 'h-8 w-8'
+  };
+
+  return (
+    <div className={cn('flex items-center justify-center gap-2', className)}>
+      <div
+        className={cn(
+          'animate-spin rounded-full border-2 border-gray-300 border-t-primary',
+          sizeClasses[size]
+        )}
+        role="status"
+        aria-label="Loading"
+      />
+      {text && (
+        <span className="text-sm text-gray-600 animate-pulse">
+          {text}
+        </span>
+      )}
+    </div>
+  );
+};
+
+// Error Display Component
+interface ErrorDisplayProps {
+  error: string | null;
+  title?: string;
+  onRetry?: () => void;
+  className?: string;
+}
+
+export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ 
+  error, 
+  title = 'Something went wrong',
+  onRetry,
+  className 
+}) => {
+  if (!error) return null;
+
+  return (
+    <div className={cn('p-4 rounded-lg bg-red-50 border border-red-200', className)}>
+      <div className="flex items-start gap-3">
+        <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <div className="flex-1">
+          <h3 className="text-sm font-semibold text-red-800 mb-1">
+            {title}
+          </h3>
+          <p className="text-sm text-red-700 mb-3">
+            {error}
+          </p>
+          {onRetry && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onRetry}
+              className="text-red-700 border-red-300 hover:bg-red-100"
+            >
+              Try Again
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Empty State Component
+interface EmptyStateProps {
+  title: string;
+  description?: string;
+  icon?: React.ReactNode;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
+  className?: string;
+}
+
+export const EmptyState: React.FC<EmptyStateProps> = ({ 
+  title, 
+  description, 
+  icon,
+  action,
+  className 
+}) => {
+  return (
+    <div className={cn('text-center py-12 px-4', className)}>
+      {icon && (
+        <div className="flex justify-center mb-4">
+          {icon}
+        </div>
+      )}
+      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        {title}
+      </h3>
+      {description && (
+        <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          {description}
+        </p>
+      )}
+      {action && (
+        <Button onClick={action.onClick}>
+          {action.label}
+        </Button>
+      )}
+    </div>
+  );
+};
+
+// Loading State Component
+interface LoadingStateProps {
+  text?: string;
+  className?: string;
+}
+
+export const LoadingState: React.FC<LoadingStateProps> = ({ 
+  text = 'Loading...',
+  className 
+}) => {
+  return (
+    <div className={cn('flex items-center justify-center py-12', className)}>
+      <LoadingSpinner size="lg" text={text} />
+    </div>
+  );
+};
+
+export { ToastContainer };
+export default ToastContainer;

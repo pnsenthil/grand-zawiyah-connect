@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Heart, CreditCard, Calendar, Target, Users, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,6 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import PaymentForm from "@/components/payment/PaymentForm";
+import PaymentSuccess from "@/components/payment/PaymentSuccess";
+import DonationAuthModal from "@/components/ui/DonationAuthModal";
+import { useDonationTracking } from "@/hooks/useAnalytics";
+import { useAuth } from "@/contexts/AuthContext";
 
 const predefinedAmounts = [25, 50, 100, 250, 500, 1000];
 
@@ -37,15 +43,17 @@ const campaigns = [
   }
 ];
 
-const DonationForm = () => {
+const DonationForm = ({ onProceedToPayment }: { onProceedToPayment: (data: any) => void }) => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState('');
   const [frequency, setFrequency] = useState('one-time');
   const [selectedCampaign, setSelectedCampaign] = useState('zawiyah');
+  const { trackDonationFunnel, trackAmount } = useDonationTracking();
 
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount);
     setCustomAmount('');
+    trackAmount(amount);
   };
 
   const handleCustomAmountChange = (value: string) => {
@@ -55,6 +63,23 @@ const DonationForm = () => {
 
   const getCurrentAmount = () => {
     return selectedAmount || parseFloat(customAmount) || 0;
+  };
+
+  const handleProceed = () => {
+    const selectedCampaignData = campaigns.find(c => c.id === selectedCampaign);
+    const amount = getCurrentAmount();
+    
+    trackDonationFunnel('payment_form', {
+      amount,
+      frequency,
+      campaign: selectedCampaignData?.name || 'General Fund'
+    });
+    
+    onProceedToPayment({
+      amount,
+      frequency: frequency as 'one-time' | 'monthly' | 'annual',
+      campaign: selectedCampaignData?.name || 'General Fund'
+    });
   };
 
   return (
@@ -131,15 +156,21 @@ const DonationForm = () => {
         </div>
       )}
 
-      <Button variant="primary" size="lg" className="w-full" disabled={getCurrentAmount() === 0}>
+      <Button 
+        variant="primary" 
+        size="lg" 
+        className="w-full" 
+        disabled={getCurrentAmount() === 0}
+        onClick={handleProceed}
+      >
         <CreditCard className="h-5 w-5 mr-2" />
-        Donate ${getCurrentAmount() || 0} {frequency !== 'one-time' ? `/${frequency.replace('ly', '')}` : ''}
+        Proceed to Payment
       </Button>
     </Card>
   );
 };
 
-const CampaignCard = ({ campaign }: { campaign: typeof campaigns[0] }) => {
+const CampaignCard = ({ campaign, onDonate }: { campaign: typeof campaigns[0]; onDonate: (campaign: typeof campaigns[0]) => void }) => {
   const progressPercentage = (campaign.raised / campaign.goal) * 100;
 
   return (
@@ -164,7 +195,7 @@ const CampaignCard = ({ campaign }: { campaign: typeof campaigns[0] }) => {
         </div>
       </div>
       
-      <Button variant="primary" className="w-full">
+      <Button variant="primary" className="w-full" onClick={() => onDonate(campaign)}>
         <Heart className="h-4 w-4 mr-2" />
         Donate Now
       </Button>
@@ -173,8 +204,132 @@ const CampaignCard = ({ campaign }: { campaign: typeof campaigns[0] }) => {
 };
 
 const Donate = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [paymentData, setPaymentData] = useState<any>(null);
+  const [successData, setSuccessData] = useState<any>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingDonation, setPendingDonation] = useState<any>(null);
+  const { trackDonationFunnel, trackSuccess, trackFailure } = useDonationTracking();
+
+  const handleProceedToPayment = (data: any) => {
+    setPaymentData(data);
+    setShowPaymentForm(true);
+  };
+
+  const handlePaymentSuccess = (result: any) => {
+    setSuccessData(result);
+    setShowPaymentForm(false);
+    setShowSuccess(true);
+    
+    // Track successful donation
+    trackSuccess(
+      result.amount,
+      'USD',
+      paymentData?.campaign || 'General Fund',
+      result.transactionId
+    );
+  };
+
+  const handlePaymentError = (error: string) => {
+    alert(`Payment failed: ${error}`);
+    
+    // Track failed donation
+    trackFailure(
+      paymentData?.amount || 0,
+      'USD',
+      paymentData?.campaign || 'General Fund',
+      error
+    );
+  };
+
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+    setShowPaymentForm(false);
+    setPaymentData(null);
+    setSuccessData(null);
+  };
+
+  const handleDonate = (campaign: typeof campaigns[0]) => {
+    if (isAuthenticated) {
+      // User is logged in, proceed directly to payments
+      navigate('/payments', { 
+        state: { 
+          campaign: campaign,
+          amount: null, // No default amount - let user input
+          description: `Donation to ${campaign.name}`,
+          type: 'donation'
+        } 
+      });
+    } else {
+      // User is not logged in, show auth modal
+      setPendingDonation(campaign);
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleLogin = () => {
+    setShowAuthModal(false);
+    navigate('/auth');
+  };
+
+  const handleContinueAsGuest = () => {
+    setShowAuthModal(false);
+    if (pendingDonation) {
+      navigate('/payments', { 
+        state: { 
+          campaign: pendingDonation,
+          amount: null,
+          description: `Donation to ${pendingDonation.name}`,
+          type: 'donation'
+        } 
+      });
+    }
+    setPendingDonation(null);
+  };
+
+  const handleCloseAuthModal = () => {
+    setShowAuthModal(false);
+    setPendingDonation(null);
+  };
+
+  if (showPaymentForm && paymentData) {
+    return (
+      <div className="min-h-screen bg-background py-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-foreground mb-2">Complete Your Donation</h1>
+            <p className="text-muted-foreground">
+              Secure payment processing for your ${paymentData.amount} donation
+            </p>
+          </div>
+          <PaymentForm
+            amount={paymentData.amount}
+            frequency={paymentData.frequency}
+            campaign={paymentData.campaign}
+            onSuccess={handlePaymentSuccess}
+            onError={handlePaymentError}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (showSuccess && successData) {
+    return (
+      <PaymentSuccess
+        transactionId={successData.transactionId}
+        amount={successData.amount}
+        campaign={paymentData?.campaign || 'General Fund'}
+        onClose={handleCloseSuccess}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <>
       {/* Header */}
       <section className="py-16 bg-gradient-hero text-primary-foreground">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -209,7 +364,7 @@ const Donate = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Donation Form */}
             <div className="lg:col-span-1">
-              <DonationForm />
+              <DonationForm onProceedToPayment={handleProceedToPayment} />
               
               {/* Quick Stats */}
               <Card className="p-6 mt-6">
@@ -236,7 +391,7 @@ const Donate = () => {
               <h2 className="text-2xl font-bold mb-6">Active Campaigns</h2>
               <div className="space-y-6">
                 {campaigns.map(campaign => (
-                  <CampaignCard key={campaign.id} campaign={campaign} />
+                  <CampaignCard key={campaign.id} campaign={campaign} onDonate={handleDonate} />
                 ))}
               </div>
               
@@ -268,7 +423,16 @@ const Donate = () => {
           </div>
         </div>
       </section>
-    </div>
+
+      {/* Authentication Modal */}
+      <DonationAuthModal
+        isOpen={showAuthModal}
+        onClose={handleCloseAuthModal}
+        onLogin={handleLogin}
+        onContinueAsGuest={handleContinueAsGuest}
+        campaign={pendingDonation}
+      />
+    </>
   );
 };
 

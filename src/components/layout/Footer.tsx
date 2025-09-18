@@ -4,7 +4,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-muted/30 border-t border-border">
+    <footer className="bg-muted/30 border-t border-border" role="contentinfo">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
@@ -23,16 +23,32 @@ const Footer = () => {
               Join us in preserving the legacy of spiritual learning and community service.
             </p>
             <div className="flex items-center space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a 
+                href="#" 
+                className="text-muted-foreground hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-legacy focus-visible:outline-offset-2"
+                aria-label="Follow us on Facebook"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a 
+                href="#" 
+                className="text-muted-foreground hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-legacy focus-visible:outline-offset-2"
+                aria-label="Follow us on Twitter"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a 
+                href="#" 
+                className="text-muted-foreground hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-legacy focus-visible:outline-offset-2"
+                aria-label="Follow us on Instagram"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a 
+                href="#" 
+                className="text-muted-foreground hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-legacy focus-visible:outline-offset-2"
+                aria-label="Subscribe to our YouTube channel"
+              >
                 <Youtube className="h-5 w-5" />
               </a>
             </div>

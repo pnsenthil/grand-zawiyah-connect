@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { 
   TrendingUp, 
   Heart, 
@@ -16,10 +17,40 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UserProfile from "@/components/auth/UserProfile";
+import AnalyticsDashboard from "@/components/analytics/AnalyticsDashboard";
+import DonationAuthModal from "@/components/ui/DonationAuthModal";
+import { usePageTracking } from "@/hooks/useAnalytics";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoadingSpinner, ErrorDisplay, EmptyState, SkeletonCard, SkeletonList } from "@/components/ui/LoadingStates";
+import { StateManager, withAsyncState } from "@/utils/stateManagement";
+import DonationDetailsModal from "@/components/ui/DonationDetailsModal";
+import EventRegistrationModal from "@/components/ui/EventRegistrationModal";
+import RegistrationSuccessModal from "@/components/ui/RegistrationSuccessModal";
 
 interface DonationData {
   month: string;
   amount: number;
+}
+
+interface Donation {
+  id: string;
+  userId: string;
+  amount: number;
+  date: string;
+  campaign: string;
+  receiptUrl: string;
+  status: 'completed' | 'pending' | 'failed';
+  paymentMethod?: string;
+  frequency?: 'one-time' | 'monthly' | 'yearly';
+  impact?: {
+    description: string;
+    beneficiaries: number;
+    category: string;
+  };
+  taxDeductible?: boolean;
+  transactionId?: string;
+  notes?: string;
 }
 
 interface Achievement {
@@ -37,6 +68,85 @@ const mockDonationData: DonationData[] = [
   { month: 'Apr', amount: 300 },
   { month: 'May', amount: 250 },
   { month: 'Jun', amount: 400 }
+];
+
+const mockDonations: Donation[] = [
+  {
+    id: 'd1',
+    userId: 'u1',
+    amount: 50,
+    date: '2023-01-15',
+    campaign: 'Education Fund',
+    receiptUrl: '#',
+    status: 'completed',
+    paymentMethod: 'Credit Card ending in 4242',
+    frequency: 'one-time',
+    impact: {
+      description: 'Your donation helped provide educational materials for 5 children in need.',
+      beneficiaries: 5,
+      category: 'Education'
+    },
+    taxDeductible: true,
+    transactionId: 'txn_123456789',
+    notes: 'Thank you for supporting education in our community.'
+  },
+  {
+    id: 'd2',
+    userId: 'u1',
+    amount: 100,
+    date: '2023-02-20',
+    campaign: 'Community Outreach',
+    receiptUrl: '#',
+    status: 'completed',
+    paymentMethod: 'Credit Card ending in 4242',
+    frequency: 'monthly',
+    impact: {
+      description: 'Your monthly contribution supports ongoing community programs and services.',
+      beneficiaries: 25,
+      category: 'Community Development'
+    },
+    taxDeductible: true,
+    transactionId: 'txn_987654321',
+    notes: 'Monthly recurring donation for community outreach programs.'
+  },
+  {
+    id: 'd3',
+    userId: 'u1',
+    amount: 25,
+    date: '2023-03-10',
+    campaign: 'Orphan Support',
+    receiptUrl: '#',
+    status: 'completed',
+    paymentMethod: 'PayPal',
+    frequency: 'one-time',
+    impact: {
+      description: 'Your donation provided essential supplies for orphaned children.',
+      beneficiaries: 3,
+      category: 'Orphan Care'
+    },
+    taxDeductible: true,
+    transactionId: 'txn_456789123',
+    notes: 'One-time donation for orphan support program.'
+  },
+  {
+    id: 'd4',
+    userId: 'u1',
+    amount: 75,
+    date: '2023-04-05',
+    campaign: 'Education Fund',
+    receiptUrl: '#',
+    status: 'completed',
+    paymentMethod: 'Bank Transfer',
+    frequency: 'one-time',
+    impact: {
+      description: 'Your contribution helped fund a new classroom for underprivileged students.',
+      beneficiaries: 15,
+      category: 'Education'
+    },
+    taxDeductible: true,
+    transactionId: 'txn_789123456',
+    notes: 'Donation for classroom construction project.'
+  }
 ];
 
 const mockAchievements: Achievement[] = [
@@ -99,14 +209,192 @@ const StatCard = ({
 );
 
 const Dashboard = () => {
-  const [selectedTab, setSelectedTab] = useState('overview');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [selectedTab, setSelectedTab] = useState(searchParams.get('tab') || 'overview');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [registrationData, setRegistrationData] = useState<any>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingDonation, setPendingDonation] = useState<any>(null);
 
-  const totalDonated = mockDonationData.reduce((sum, data) => sum + data.amount, 0);
+  // Handle tab changes and URL updates
+  const handleTabChange = (tab: string) => {
+    setSelectedTab(tab);
+    setSearchParams({ tab });
+  };
+
+  // Update tab from URL on mount
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab');
+    if (tabFromUrl && tabFromUrl !== selectedTab) {
+      setSelectedTab(tabFromUrl);
+    }
+  }, [searchParams, selectedTab]);
+  
+  // Track page view
+  usePageTracking('dashboard');
+
+  // Simulate loading dashboard data
+  useEffect(() => {
+    // Remove artificial delay for better performance
+    setIsLoading(false);
+  }, []);
+
+  const totalDonated = mockDonations.reduce((sum, donation) => sum + donation.amount, 0);
   const currentGoal = 2000;
   const goalProgress = (totalDonated / currentGoal) * 100;
 
+  const handleLearnMore = (donation: Donation) => {
+    setSelectedDonation(donation);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDonation(null);
+  };
+
+  const handleDownloadReceipt = (donation: Donation) => {
+    // Generate receipt content
+    const receiptContent = `
+GRAND ZAWIYAH CONNECT
+Donation Receipt
+
+Receipt ID: ${donation.id}
+Date: ${donation.date}
+Amount: $${donation.amount.toFixed(2)}
+Campaign: ${donation.campaign}
+Payment Method: ${donation.paymentMethod}
+Status: ${donation.status}
+
+Thank you for your generous contribution to the Grand Zawiyah community.
+Your donation helps support Islamic education and community programs.
+
+This receipt is tax-deductible to the extent allowed by law.
+Grand Zawiyah Connect is a registered non-profit organization.
+
+For questions, contact: support@grandzawiyah.org
+    `.trim();
+
+    // Create and download receipt
+    const blob = new Blob([receiptContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `donation-receipt-${donation.id}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    console.log('Receipt downloaded for donation:', donation.id);
+  };
+
+  const handleShare = (donation: Donation) => {
+    // Create share content
+    const shareText = `I just donated $${donation.amount} to ${donation.campaign} through Grand Zawiyah Connect! Join me in supporting Islamic education and community programs. #GrandZawiyah #SadaqahJariyah`;
+    const shareUrl = window.location.origin;
+    
+    // Check if Web Share API is supported
+    if (navigator.share) {
+      navigator.share({
+        title: 'My Donation to Grand Zawiyah',
+        text: shareText,
+        url: shareUrl
+      }).catch(console.error);
+    } else {
+      // Fallback: copy to clipboard
+      const shareContent = `${shareText}\n\n${shareUrl}`;
+      navigator.clipboard.writeText(shareContent).then(() => {
+        alert('Share content copied to clipboard!');
+      }).catch(() => {
+        // Final fallback: show share content
+        alert(`Share this:\n\n${shareContent}`);
+      });
+    }
+    
+    console.log('Sharing donation:', donation.id);
+  };
+
+  const handleEventRegister = (eventData: any) => {
+    setSelectedEvent(eventData);
+    setIsRegistrationModalOpen(true);
+  };
+
+  const handleRegistrationConfirm = (data: any) => {
+    setRegistrationData(data);
+    setIsRegistrationModalOpen(false);
+    setIsSuccessModalOpen(true);
+  };
+
+  const handleCloseRegistrationModal = () => {
+    setIsRegistrationModalOpen(false);
+    setSelectedEvent(null);
+  };
+
+  const handleCloseSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+    setRegistrationData(null);
+    setSelectedEvent(null);
+  };
+
+  if (isLoading) {
+    return (
+      <>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Track your donations, achievements, and spiritual journey
+          </p>
+        </div>
+
+        {/* Loading State */}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Track your donations, achievements, and spiritual journey
+          </p>
+        </div>
+
+        {/* Error State */}
+        <ErrorDisplay 
+          error={error}
+          title="Failed to load dashboard"
+          onRetry={() => window.location.reload()}
+        />
+      </>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <>
       {/* Header */}
       <section className="py-16 bg-gradient-hero text-primary-foreground">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -134,12 +422,14 @@ const Dashboard = () => {
       {/* Main Dashboard */}
       <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8">
+          <Tabs value={selectedTab} onValueChange={handleTabChange} className="w-full">
+            <TabsList className="grid w-full grid-cols-6 mb-8">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="donations">Donations</TabsTrigger>
               <TabsTrigger value="learning">Learning</TabsTrigger>
               <TabsTrigger value="community">Community</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="profile">Profile</TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
@@ -187,7 +477,7 @@ const Dashboard = () => {
                     <p className="text-sm text-muted-foreground">
                       {goalProgress.toFixed(1)}% complete • ${currentGoal - totalDonated} remaining
                     </p>
-                    <Button variant="primary" className="w-full">
+                    <Button variant="primary" className="w-full" onClick={() => navigate('/payments')}>
                       Make a Donation
                     </Button>
                   </div>
@@ -220,15 +510,15 @@ const Dashboard = () => {
               <Card className="p-6">
                 <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Button variant="primary" className="h-20 flex-col gap-2">
+                  <Button variant="primary" className="h-20 flex-col gap-2" onClick={() => navigate('/payments')}>
                     <Heart className="h-6 w-6" />
                     Make a Donation
                   </Button>
-                  <Button variant="outline" className="h-20 flex-col gap-2">
+                  <Button variant="outline" className="h-20 flex-col gap-2" onClick={() => navigate('/lessons')}>
                     <BookOpen className="h-6 w-6" />
                     Continue Learning
                   </Button>
-                  <Button variant="outline" className="h-20 flex-col gap-2">
+                  <Button variant="outline" className="h-20 flex-col gap-2" onClick={() => navigate('/events')}>
                     <Calendar className="h-6 w-6" />
                     Browse Events
                   </Button>
@@ -243,30 +533,38 @@ const Dashboard = () => {
                   <Card className="p-6">
                     <h3 className="text-xl font-semibold mb-4">Donation History</h3>
                     <div className="space-y-4">
-                      <div className="flex justify-between items-center py-3 border-b border-border">
-                        <div>
-                          <p className="font-medium">Monthly Recurring</p>
-                          <p className="text-sm text-muted-foreground">General Fund</p>
+                      {mockDonations.map((donation) => (
+                        <div key={donation.id} className="flex justify-between items-center py-3 border-b border-border">
+                          <div className="flex-1">
+                            <p className="font-medium">{donation.campaign}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {donation.frequency === 'monthly' ? 'Monthly Recurring' : 'One-time Donation'}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(donation.date).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                              })}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium">${donation.amount}</p>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => handleLearnMore(donation)}
+                              className="mt-1"
+                            >
+                              Learn More
+                            </Button>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-medium">$100</p>
-                          <p className="text-sm text-muted-foreground">June 15, 2024</p>
-                        </div>
-                      </div>
-                      <div className="flex justify-between items-center py-3 border-b border-border">
-                        <div>
-                          <p className="font-medium">One-time Donation</p>
-                          <p className="text-sm text-muted-foreground">Zawiyah Construction</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-medium">$250</p>
-                          <p className="text-sm text-muted-foreground">May 28, 2024</p>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                     <Button variant="outline" className="w-full mt-4">
                       <Download className="h-4 w-4 mr-2" />
-                      Download Tax Receipt
+                      Download All Tax Receipts
                     </Button>
                   </Card>
                 </div>
@@ -331,7 +629,7 @@ const Dashboard = () => {
                       <Progress value={12.5} className="h-2" />
                     </div>
                   </div>
-                  <Button variant="primary" className="w-full mt-4">
+                  <Button variant="primary" className="w-full mt-4" onClick={() => navigate('/lessons')}>
                     Continue Learning
                   </Button>
                 </Card>
@@ -380,10 +678,26 @@ const Dashboard = () => {
                         <p className="font-medium">Islamic Finance Workshop</p>
                         <p className="text-sm text-muted-foreground">Sept 25, 2:00 PM</p>
                       </div>
-                      <Button variant="outline" size="sm">Register</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleEventRegister({
+                          id: 'islamic-finance-workshop',
+                          title: 'Islamic Finance Workshop',
+                          description: 'Learn about Islamic banking principles and Sharia-compliant investments',
+                          date: '2024-09-25',
+                          time: '14:00',
+                          location: 'Grand Zawiyah Conference Room',
+                          type: 'workshop',
+                          organizer: 'Shaykh Abdullah',
+                          isFree: true
+                        })}
+                      >
+                        Register
+                      </Button>
                     </div>
                   </div>
-                  <Button variant="primary" className="w-full mt-4">
+                  <Button variant="primary" className="w-full mt-4" onClick={() => navigate('/events')}>
                     Browse All Events
                   </Button>
                 </Card>
@@ -407,10 +721,46 @@ const Dashboard = () => {
                 </Card>
               </div>
             </TabsContent>
+
+            {/* Analytics Tab */}
+            <TabsContent value="analytics" className="space-y-8">
+              <AnalyticsDashboard />
+            </TabsContent>
+
+            {/* Profile Tab */}
+            <TabsContent value="profile" className="space-y-8">
+              <UserProfile />
+            </TabsContent>
           </Tabs>
         </div>
       </section>
-    </div>
+
+      {/* Donation Details Modal */}
+      <DonationDetailsModal
+        donation={selectedDonation}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onDownloadReceipt={handleDownloadReceipt}
+        onShare={handleShare}
+      />
+
+      {/* Event Registration Modal */}
+      <EventRegistrationModal
+        event={selectedEvent}
+        isOpen={isRegistrationModalOpen}
+        onClose={handleCloseRegistrationModal}
+        onConfirm={handleRegistrationConfirm}
+      />
+
+      {/* Registration Success Modal */}
+      <RegistrationSuccessModal
+        event={selectedEvent}
+        registrationData={registrationData}
+        isOpen={isSuccessModalOpen}
+        onClose={handleCloseSuccessModal}
+        onDownloadConfirmation={() => console.log('Confirmation downloaded')}
+      />
+    </>
   );
 };
 

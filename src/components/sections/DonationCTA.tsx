@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 import { Heart, Shield, TrendingUp, Gift } from "lucide-react";
 
 const DonationCTA = () => {
+  const navigate = useNavigate();
   const donationOptions = [
     { amount: "$25", label: "Feed a Family", popular: false },
     { amount: "$50", label: "Monthly Support", popular: true },
@@ -30,7 +32,7 @@ const DonationCTA = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-legacy/5">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -42,7 +44,7 @@ const DonationCTA = () => {
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Your Donation Creates{" "}
-              <span className="bg-gradient-to-r from-primary to-legacy bg-clip-text text-transparent">
+              <span className="text-legacy">
                 Lasting Impact
               </span>
             </h2>
@@ -113,6 +115,17 @@ const DonationCTA = () => {
                 </div>
               </div>
 
+              {/* Round-Up Feature */}
+              <div id="roundup" className="mb-8 p-4 md:p-5 rounded-xl border border-primary/30 bg-primary/5">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div>
+                    <h4 className="font-semibold text-foreground">Round‑Up Your Purchases</h4>
+                    <p className="text-sm text-muted-foreground">Link your card to automatically round purchases to the next dollar and donate the change—set a monthly cap and track your impact.</p>
+                  </div>
+                  <Button variant="primary">Enable Round‑Up</Button>
+                </div>
+              </div>
+
               {/* Benefits */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {benefits.map((benefit, index) => (
@@ -126,9 +139,9 @@ const DonationCTA = () => {
               </div>
 
               {/* CTA Button */}
-              <Button variant="hero" size="lg" className="w-full text-lg py-6">
+              <Button variant="hero" size="lg" className="w-full text-lg py-6" onClick={() => navigate('/payments')}>
                 <Heart className="mr-2 h-5 w-5" />
-                Donate with Love
+                Donate
               </Button>
 
               {/* Trust Note */}

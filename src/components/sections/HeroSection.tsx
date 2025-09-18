@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-community.jpg";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-primary">
       {/* Background with Islamic geometric pattern */}
       <div className="absolute inset-0 geometric-pattern opacity-30"></div>
       <div className="absolute inset-0 hero-gradient opacity-95"></div>
@@ -21,21 +24,21 @@ const HeroSection = () => {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 animate-fade-in">
-              Empowering Lives Through{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">
-                Spiritual Learning
+              Transform Small Gifts into{" "}
+              <span className="text-yellow-300">
+                Lasting Sadaqah Jariyah
               </span>
             </h1>
             
             <p className="text-lg md:text-xl text-primary-foreground/90 mb-8 max-w-2xl animate-slide-up">
-              Join the Grand Zawiyah community for Islamic education, charitable giving, and 
-              spiritual growth. Together, we preserve the legacy of knowledge and build a stronger ummah.
+              Unite worship, learning, and service inspired by Shaykh Hassan Cisse’s vision. 
+              Enable secure giving, track your impact, and access exclusive Tariqa content—all in one place.
             </p>
             
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-scale-in">
-              <Button variant="hero" size="lg" className="group">
-                Donate Now
+              <Button variant="hero" size="lg" className="group" onClick={() => navigate('/payments')}>
+                Donate
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               

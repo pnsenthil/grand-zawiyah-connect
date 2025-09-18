@@ -1,8 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { DollarSign, BookOpen, Users, TrendingUp, Shield, Zap } from "lucide-react";
 
 const FeaturesSection = () => {
+  const navigate = useNavigate();
   const features = [
     {
       icon: <DollarSign className="h-8 w-8" />,
@@ -49,16 +51,7 @@ const FeaturesSection = () => {
   ];
 
   const getColorClass = (color: string) => {
-    switch (color) {
-      case "primary":
-        return "text-primary bg-primary/10 border-primary/20";
-      case "legacy":
-        return "text-legacy bg-legacy/10 border-legacy/20";
-      case "secondary":
-        return "text-secondary bg-secondary/10 border-secondary/20";
-      default:
-        return "text-primary bg-primary/10 border-primary/20";
-    }
+    return "text-legacy bg-legacy/10 border-legacy/20";
   };
 
   return (
@@ -73,7 +66,7 @@ const FeaturesSection = () => {
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Everything You Need for{" "}
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="text-legacy">
               Spiritual Growth
             </span>
           </h2>
@@ -109,7 +102,7 @@ const FeaturesSection = () => {
 
         {/* CTA Section */}
         <div className="mt-16 text-center">
-          <div className="bg-gradient-accent rounded-3xl p-8 md:p-12">
+          <div className="bg-legacy/5 rounded-3xl p-8 md:p-12 border border-legacy/20">
             <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
               Ready to Begin Your Journey?
             </h3>
@@ -118,10 +111,10 @@ const FeaturesSection = () => {
               Start with a donation or explore our educational content.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg">
-                Make Your First Donation
+              <Button variant="primary" size="lg" onClick={() => navigate('/payments')}>
+                Donate
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="border-legacy text-legacy hover:bg-legacy hover:text-legacy-foreground">
                 Explore Lessons
               </Button>
             </div>
