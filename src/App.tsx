@@ -19,11 +19,17 @@ const LessonDetail = lazy(() => import("./pages/LessonDetail"));
 const Donate = lazy(() => import("./pages/Donate"));
 const Premium = lazy(() => import("./pages/Premium"));
 const Events = lazy(() => import("./pages/Events"));
-const RoundUp = lazy(() => import("./pages/RoundUp"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Payments = lazy(() => import("./pages/Payments"));
 const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 const PremiumPricing = lazy(() => import("./pages/PremiumPricing"));
+const About = lazy(() => import("./pages/About"));
+const Volunteer = lazy(() => import("./pages/Volunteer"));
+const BODMessage = lazy(() => import("./pages/BODMessage"));
+const Community = lazy(() => import("./pages/Community"));
+const PremiumPayments = lazy(() => import("./pages/PremiumPayments"));
+const PremiumConfirmation = lazy(() => import("./pages/PremiumConfirmation"));
+const PremiumSuccess = lazy(() => import("./pages/PremiumSuccess"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -48,11 +54,17 @@ const App = () => {
               <Route path="/lessons/:id" element={<ProtectedRoute><Layout><LessonDetail /></Layout></ProtectedRoute>} />
               <Route path="/premium" element={<ProtectedRoute><Layout><Premium /></Layout></ProtectedRoute>} />
               <Route path="/donate" element={<Layout><Donate /></Layout>} />
-              <Route path="/roundup" element={<ProtectedRoute><Layout><RoundUp /></Layout></ProtectedRoute>} />
               <Route path="/events" element={<Layout><Events /></Layout>} />
               <Route path="/payments" element={<Layout><Payments /></Layout>} />
               <Route path="/donate/success" element={<Layout><PaymentSuccess /></Layout>} />
               <Route path="/premium-pricing" element={<Layout><PremiumPricing /></Layout>} />
+              <Route path="/about" element={<Layout><About /></Layout>} />
+              <Route path="/volunteer" element={<Layout><Volunteer /></Layout>} />
+              <Route path="/bod-message" element={<Layout><BODMessage /></Layout>} />
+              <Route path="/community" element={<Layout><Community /></Layout>} />
+              <Route path="/premium-payments" element={<ProtectedRoute><Layout><PremiumPayments /></Layout></ProtectedRoute>} />
+              <Route path="/premium-confirmation" element={<ProtectedRoute><Layout><PremiumConfirmation /></Layout></ProtectedRoute>} />
+              <Route path="/premium-success" element={<ProtectedRoute><Layout><PremiumSuccess /></Layout></ProtectedRoute>} />
               <Route path="*" element={<Layout><NotFound /></Layout>} />
               </Routes>
             </Suspense>

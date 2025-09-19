@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import SignInForm from "@/components/auth/SignInForm";
 import SignUpForm from "@/components/auth/SignUpForm";
 import { Button } from "@/components/ui/button";
@@ -8,10 +8,18 @@ import { ArrowLeft } from "lucide-react";
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleAuthSuccess = () => {
-    // Redirect to dashboard after successful authentication
-    navigate('/dashboard');
+    // Check if there's a redirect path in the location state
+    const redirectTo = location.state?.redirectTo || '/dashboard';
+    const paymentData = location.state?.paymentData;
+    
+    if (paymentData) {
+      navigate(redirectTo, { state: paymentData });
+    } else {
+      navigate(redirectTo);
+    }
   };
 
   const handleGoBack = () => {

@@ -53,6 +53,7 @@ const mockLesson: Lesson = {
   isCompleted: true,
   rating: 4.8,
   instructor: 'Shaykh Hassan Cisse Foundation',
+  thumbnail: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=400&fit=crop&crop=center',
   longDescription: 'This comprehensive introduction covers the historical origins, spiritual principles, and foundational practices of the Tijaniyya tariqa. Perfect for those beginning their spiritual journey or seeking to understand this beautiful path. You will learn about the life of Shaykh Ahmad al-Tijani, the establishment of the tariqa, and its core teachings that have guided millions of believers worldwide.',
   modules: [
     { title: 'Historical Origins', duration: '15 min', isCompleted: true },
@@ -72,8 +73,8 @@ const mockLesson: Lesson = {
     { title: 'Historical Timeline', type: 'pdf', url: '#' }
   ],
   relatedLessons: [
-    { id: '2', title: 'The Life of Shaykh Hassan Cisse (RA)', thumbnail: '#' },
-    { id: '3', title: 'Daily Wird and Spiritual Practices', thumbnail: '#' }
+    { id: '2', title: 'The Life of Shaykh Hassan Cisse (RA)', thumbnail: 'https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&h=250&fit=crop&crop=center' },
+    { id: '3', title: 'Daily Wird and Spiritual Practices', thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop&crop=center' }
   ]
 };
 
@@ -154,6 +155,32 @@ const LessonDetail = () => {
             </Button>
           </div>
 
+          {/* Hero Image Section */}
+          {lesson.thumbnail && (
+            <div className="mb-8">
+              <div className="relative rounded-xl overflow-hidden shadow-lg">
+                <img 
+                  src={lesson.thumbnail} 
+                  alt={lesson.title}
+                  className="w-full h-64 md:h-80 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h1 className="text-3xl md:text-4xl font-bold mb-2">{lesson.title}</h1>
+                  <p className="text-lg opacity-90 max-w-2xl">{lesson.description}</p>
+                </div>
+                {/* Play button overlay for video lessons */}
+                {lesson.type === 'video' && (
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors cursor-pointer">
+                      <Play className="h-8 w-8 text-white ml-1" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3 mb-4">
@@ -176,13 +203,27 @@ const LessonDetail = () => {
                 </div>
               </div>
 
-              <h1 className="text-4xl font-bold text-foreground mb-4">{lesson.title}</h1>
-              <p className="text-lg text-muted-foreground mb-6">{lesson.description}</p>
+              {!lesson.thumbnail && (
+                <>
+                  <h1 className="text-4xl font-bold text-foreground mb-4">{lesson.title}</h1>
+                  <p className="text-lg text-muted-foreground mb-6">{lesson.description}</p>
+                </>
+              )}
 
               {lesson.instructor && (
-                <div className="flex items-center gap-2 mb-6">
-                  <UserIcon className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Instructor: {lesson.instructor}</span>
+                <div className="flex items-center gap-3 mb-6 p-4 bg-muted/30 rounded-lg">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
+                      alt="Instructor"
+                      className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                  </div>
+                  <div>
+                    <span className="text-sm text-muted-foreground">Instructor</span>
+                    <p className="font-medium">{lesson.instructor}</p>
+                  </div>
                 </div>
               )}
 
@@ -297,9 +338,19 @@ const LessonDetail = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <Card>
                   <CardHeader>
-                    <CardTitle>About This Lesson</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <BookOpen className="h-5 w-5 text-primary" />
+                      About This Lesson
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
+                    <div className="mb-4">
+                      <img 
+                        src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=200&fit=crop&crop=center"
+                        alt="Islamic learning"
+                        className="w-full h-32 object-cover rounded-lg mb-4"
+                      />
+                    </div>
                     <p className="text-muted-foreground leading-relaxed">
                       {lesson.longDescription}
                     </p>
@@ -352,25 +403,37 @@ const LessonDetail = () => {
             <TabsContent value="modules" className="mt-8">
               <Card>
                 <CardHeader>
-                  <CardTitle>Lesson Modules</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <List className="h-5 w-5 text-primary" />
+                    Lesson Modules
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {lesson.modules?.map((module, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                             module.isCompleted ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'
                           }`}>
                             {module.isCompleted ? (
-                              <CheckCircle className="h-5 w-5" />
+                              <CheckCircle className="h-6 w-6" />
                             ) : (
-                              <span className="text-sm font-medium">{index + 1}</span>
+                              <span className="text-sm font-bold">{index + 1}</span>
                             )}
                           </div>
-                          <div>
-                            <h4 className="font-medium">{module.title}</h4>
-                            <p className="text-sm text-muted-foreground">{module.duration}</p>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-lg">{module.title}</h4>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <Clock className="h-4 w-4" />
+                              {module.duration}
+                              {module.isCompleted && (
+                                <>
+                                  <span className="mx-2">•</span>
+                                  <span className="text-green-600 font-medium">Completed</span>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                         <Button 
@@ -417,9 +480,25 @@ const LessonDetail = () => {
             <TabsContent value="related" className="mt-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {lesson.relatedLessons?.map((relatedLesson) => (
-                  <Card key={relatedLesson.id} className="cursor-pointer hover:shadow-lg transition-shadow">
+                  <Card key={relatedLesson.id} className="cursor-pointer hover:shadow-lg transition-shadow overflow-hidden">
+                    {relatedLesson.thumbnail && (
+                      <div className="relative">
+                        <img 
+                          src={relatedLesson.thumbnail} 
+                          alt={relatedLesson.title}
+                          className="w-full h-32 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                        <div className="absolute top-3 right-3">
+                          <Badge className="bg-white/20 text-white border-white/30">
+                            <Play className="h-3 w-3 mr-1" />
+                            Video
+                          </Badge>
+                        </div>
+                      </div>
+                    )}
                     <CardContent className="p-4">
-                      <h4 className="font-medium mb-2">{relatedLesson.title}</h4>
+                      <h4 className="font-medium mb-3 line-clamp-2">{relatedLesson.title}</h4>
                       <Button 
                         variant="outline" 
                         size="sm" 

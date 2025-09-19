@@ -129,9 +129,9 @@ const mockLessons: Lesson[] = [
 const LessonCard = ({ lesson, onLearnMore, onViewLesson }: { lesson: Lesson; onLearnMore: (lesson: Lesson) => void; onViewLesson: (lesson: Lesson) => void }) => {
   const getTypeIcon = () => {
     switch (lesson.type) {
-      case 'video': return <Play className="h-4 w-4" />;
-      case 'audio': return <BookOpen className="h-4 w-4" />;
-      default: return <BookOpen className="h-4 w-4" />;
+      case 'video': return <Play className="h-4 w-4 text-green-600" />;
+      case 'audio': return <BookOpen className="h-4 w-4 text-green-600" />;
+      default: return <BookOpen className="h-4 w-4 text-green-600" />;
     }
   };
 
@@ -165,7 +165,7 @@ const LessonCard = ({ lesson, onLearnMore, onViewLesson }: { lesson: Lesson; onL
       
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-4 w-4" />
+          <Clock className="h-4 w-4 text-green-600" />
           {lesson.duration}
         </div>
         
@@ -190,7 +190,7 @@ const LessonCard = ({ lesson, onLearnMore, onViewLesson }: { lesson: Lesson; onL
           <div className="flex items-center justify-between text-sm">
             <span className="text-green-600 font-medium">✓ Completed</span>
             <Button variant="ghost" size="sm">
-              <Download className="h-4 w-4 mr-1" />
+              <Download className="h-4 w-4 mr-1 text-green-600" />
               Certificate
             </Button>
           </div>

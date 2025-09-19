@@ -116,14 +116,42 @@ const DonationCTA = () => {
               </div>
 
               {/* Round-Up Feature */}
-              <div id="roundup" className="mb-8 p-4 md:p-5 rounded-xl border border-primary/30 bg-primary/5">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                  <div>
-                    <h4 className="font-semibold text-foreground">Round‑Up Your Purchases</h4>
-                    <p className="text-sm text-muted-foreground">Link your card to automatically round purchases to the next dollar and donate the change—set a monthly cap and track your impact.</p>
-                  </div>
-                  <Button variant="primary">Enable Round‑Up</Button>
+              <div className="mb-8">
+                <h4 className="font-semibold text-foreground mb-4">Or Enable Round‑Up Giving</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <button className="p-4 rounded-xl border-2 border-primary/30 bg-primary/5 hover:bg-primary/10 transition-all duration-200 hover:scale-105 text-left">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-bold text-primary">$</span>
+                      </div>
+                      <span className="font-semibold text-foreground">Round‑Up</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Automatically round up purchases</p>
+                  </button>
+                  
+                  <button className="p-4 rounded-xl border-2 border-border bg-background hover:border-primary/50 transition-all duration-200 hover:scale-105 text-left">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-8 h-8 bg-secondary/20 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-bold text-secondary">$</span>
+                      </div>
+                      <span className="font-semibold text-foreground">Double Round‑Up</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Round up + match the amount</p>
+                  </button>
+                  
+                  <button className="p-4 rounded-xl border-2 border-border bg-background hover:border-primary/50 transition-all duration-200 hover:scale-105 text-left">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-8 h-8 bg-legacy/20 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-bold text-legacy">$</span>
+                      </div>
+                      <span className="font-semibold text-foreground">Custom Round‑Up</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Set your own round‑up amount</p>
+                  </button>
                 </div>
+                <p className="text-xs text-muted-foreground mt-3 text-center">
+                  Link your card to automatically donate spare change from everyday purchases
+                </p>
               </div>
 
               {/* Benefits */}

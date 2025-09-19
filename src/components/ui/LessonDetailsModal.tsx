@@ -90,19 +90,12 @@ const LessonDetailsModal = ({ lesson, isOpen, onClose, onUpgradeToPremium }: Les
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <DialogTitle className="text-2xl font-bold text-foreground mb-2">
-                {lesson.title}
-              </DialogTitle>
-              <DialogDescription className="text-muted-foreground">
-                {lesson.description}
-              </DialogDescription>
-            </div>
-            <Button variant="ghost" size="sm" onClick={onClose} className="ml-4">
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          <DialogTitle className="text-2xl font-bold text-foreground mb-2">
+            {lesson.title}
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground">
+            {lesson.description}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">

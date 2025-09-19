@@ -94,10 +94,17 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Bottom wave */}
+      {/* Bottom wave with enhanced curve */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1200 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-          <path d="M0 120L50 105C100 90 200 60 300 45C400 30 500 30 600 37.5C700 45 800 60 900 67.5C1000 75 1100 75 1150 75L1200 75V120H1150C1100 120 1000 120 900 120C800 120 700 120 600 120C500 120 400 120 300 120C200 120 100 120 50 120H0Z" fill="currentColor" className="text-background"/>
+          <path d="M0 120L50 110C100 100 200 80 300 70C400 60 500 60 600 65C700 70 800 80 900 85C1000 90 1100 90 1150 90L1200 90V120H1150C1100 120 1000 120 900 120C800 120 700 120 600 120C500 120 400 120 300 120C200 120 100 120 50 120H0Z" fill="currentColor" className="text-background"/>
+        </svg>
+      </div>
+      
+      {/* Additional curve layer for smoother transition */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1200 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+          <path d="M0 80L50 75C100 70 200 60 300 55C400 50 500 50 600 52.5C700 55 800 60 900 62.5C1000 65 1100 65 1150 65L1200 65V80H1150C1100 80 1000 80 900 80C800 80 700 80 600 80C500 80 400 80 300 80C200 80 100 80 50 80H0Z" fill="currentColor" className="text-background opacity-80"/>
         </svg>
       </div>
     </section>

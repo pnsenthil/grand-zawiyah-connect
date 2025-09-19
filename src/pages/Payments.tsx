@@ -240,10 +240,14 @@ const Payments = () => {
 
           {/* Payment Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsList className="grid w-full grid-cols-4 mb-8">
               <TabsTrigger value="checkout" className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4" />
                 One-time Donation
+              </TabsTrigger>
+              <TabsTrigger value="roundup" className="flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                Round-up Giving
               </TabsTrigger>
               <TabsTrigger value="subscription" className="flex items-center gap-2">
                 <Heart className="h-4 w-4" />
@@ -342,6 +346,129 @@ const Payments = () => {
                         Your contribution helps us respond quickly to community needs
                       </p>
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Round-up Giving Tab */}
+            <TabsContent value="roundup" className="space-y-6">
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-2">
+                  Round-up Giving
+                </h2>
+                <p className="text-muted-foreground">
+                  Automatically round up your everyday purchases to support our mission
+                </p>
+              </div>
+
+              <Card className="border-primary/20 bg-primary/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-primary" />
+                    How Round-up Giving Works
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <CreditCard className="h-8 w-8 text-primary" />
+                      </div>
+                      <h4 className="font-semibold mb-2">1. Connect Your Card</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Securely link your debit or credit card to our platform
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Zap className="h-8 w-8 text-primary" />
+                      </div>
+                      <h4 className="font-semibold mb-2">2. Automatic Rounding</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Every purchase gets rounded up to the nearest dollar
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Heart className="h-8 w-8 text-primary" />
+                      </div>
+                      <h4 className="font-semibold mb-2">3. Make a Difference</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Small amounts add up to create meaningful impact
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-background rounded-lg p-6 border">
+                    <h4 className="font-semibold mb-4">Example Round-up Impact</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Coffee purchase: $4.75</span>
+                        <span className="text-sm text-primary font-medium">+$0.25</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Grocery shopping: $23.40</span>
+                        <span className="text-sm text-primary font-medium">+$0.60</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">Gas station: $31.20</span>
+                        <span className="text-sm text-primary font-medium">+$0.80</span>
+                      </div>
+                      <div className="border-t pt-3 mt-3">
+                        <div className="flex justify-between items-center font-semibold">
+                          <span>Daily total impact:</span>
+                          <span className="text-primary">$1.65</span>
+                        </div>
+                        <div className="flex justify-between items-center font-semibold">
+                          <span>Monthly impact:</span>
+                          <span className="text-primary">~$50</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Set Up Round-up Giving</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <h4 className="font-medium">Round-up Amount</h4>
+                        <p className="text-sm text-muted-foreground">Choose how much to round up</p>
+                      </div>
+                      <Badge variant="secondary">$0.01 - $1.00</Badge>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <h4 className="font-medium">Monthly Cap</h4>
+                        <p className="text-sm text-muted-foreground">Set a maximum monthly donation</p>
+                      </div>
+                      <Badge variant="secondary">$25 - $100</Badge>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <h4 className="font-medium">Donation Frequency</h4>
+                        <p className="text-sm text-muted-foreground">When to process your round-ups</p>
+                      </div>
+                      <Badge variant="secondary">Weekly</Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t">
+                    <Button className="w-full" size="lg">
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      Connect Card & Start Rounding Up
+                    </Button>
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      Your card information is encrypted and secure. You can pause or stop anytime.
+                    </p>
                   </div>
                 </CardContent>
               </Card>

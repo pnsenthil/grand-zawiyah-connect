@@ -7,42 +7,42 @@ const FeaturesSection = () => {
   const navigate = useNavigate();
   const features = [
     {
-      icon: <DollarSign className="h-8 w-8" />,
+      icon: <DollarSign className="h-8 w-8 text-green-600" />,
       title: "Seamless Donations",
       description: "Make one-time or recurring donations with multiple payment options. Track your impact and receive instant receipts.",
       highlight: "New: Round-up giving",
       color: "primary",
     },
     {
-      icon: <BookOpen className="h-8 w-8" />,
+      icon: <BookOpen className="h-8 w-8 text-green-600" />,
       title: "Tariqa Lessons",
       description: "Access exclusive Islamic educational content, video lectures, and spiritual guidance from renowned scholars.",
       highlight: "Premium content",
       color: "legacy",
     },
     {
-      icon: <Users className="h-8 w-8" />,
+      icon: <Users className="h-8 w-8 text-green-600" />,
       title: "Community Hub",
       description: "Connect with fellow Muslims, join events, volunteer opportunities, and build lasting relationships.",
       highlight: "Join 50K+ members",
       color: "secondary",
     },
     {
-      icon: <TrendingUp className="h-8 w-8" />,
+      icon: <TrendingUp className="h-8 w-8 text-green-600" />,
       title: "Impact Tracking",
       description: "Visualize your contribution impact with detailed analytics and progress reports on funded projects.",
       highlight: "Real-time updates",
       color: "primary",
     },
     {
-      icon: <Shield className="h-8 w-8" />,
+      icon: <Shield className="h-8 w-8 text-green-600" />,
       title: "Secure & Transparent",
       description: "Your donations are protected with bank-level security. Full transparency on how funds are utilized.",
       highlight: "100% secure",
       color: "legacy",
     },
     {
-      icon: <Zap className="h-8 w-8" />,
+      icon: <Zap className="h-8 w-8 text-green-600" />,
       title: "Quick Actions",
       description: "Fast donation flows, instant access to lessons, and streamlined community engagement features.",
       highlight: "3-second donations",
@@ -51,7 +51,7 @@ const FeaturesSection = () => {
   ];
 
   const getColorClass = (color: string) => {
-    return "text-legacy bg-legacy/10 border-legacy/20";
+    return "text-green-600 bg-green-100 border-green-200";
   };
 
   return (
@@ -60,13 +60,13 @@ const FeaturesSection = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-block mb-4">
-            <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
+            <span className="text-sm font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full">
               Platform Features
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Everything You Need for{" "}
-            <span className="text-legacy">
+            <span className="text-green-600">
               Spiritual Growth
             </span>
           </h2>

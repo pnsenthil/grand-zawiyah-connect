@@ -21,9 +21,17 @@ const Header = () => {
 
   const navigationItems = [
     { label: "Home", href: "/" },
+    { label: "Premium", href: "/lessons" },
+    { label: "Donate", href: "/donate" },
+    { label: "Events", href: "/events" },
+    { label: "Payments", href: "/payments" },
+  ];
+
+  // Add Dashboard between Home and Premium for authenticated users
+  const authenticatedNavigationItems = [
+    { label: "Home", href: "/" },
     { label: "Dashboard", href: "/dashboard" },
     { label: "Premium", href: "/lessons" },
-    { label: "Round‑Up", href: "/roundup" },
     { label: "Donate", href: "/donate" },
     { label: "Events", href: "/events" },
     { label: "Payments", href: "/payments" },
@@ -42,14 +50,13 @@ const Header = () => {
               <span className="text-primary-foreground font-bold text-lg">GZ</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">Grand Zawiyah</h1>
-              <p className="text-xs text-muted-foreground hidden sm:block">Growth & Legacy through Sadaqah Jariyah</p>
+              <h1 className="text-xl font-bold" style={{ color: '#6c1376' }}>Grand Zawiyah</h1>
             </div>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8" role="navigation" aria-label="Main navigation">
-            {navigationItems.map((item) => {
+            {(isAuthenticated ? authenticatedNavigationItems : navigationItems).map((item) => {
               const isActive = location.pathname === item.href || 
                 (item.href === "/" && location.pathname === "/") ||
                 (item.href !== "/" && location.pathname.startsWith(item.href));
@@ -149,7 +156,7 @@ const Header = () => {
             aria-label="Mobile navigation"
           >
             <nav className="flex flex-col space-y-3">
-              {navigationItems.map((item) => {
+              {(isAuthenticated ? authenticatedNavigationItems : navigationItems).map((item) => {
                 const isActive = location.pathname === item.href || 
                   (item.href === "/" && location.pathname === "/") ||
                   (item.href !== "/" && location.pathname.startsWith(item.href));
