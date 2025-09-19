@@ -134,7 +134,7 @@ const mockEvents: Event[] = [
 
 const getTypeColor = (type: Event['type']) => {
   switch (type) {
-    case 'spiritual': return 'bg-purple-100 text-purple-800';
+    case 'spiritual': return 'bg-legacy/10 text-legacy border border-legacy/20';
     case 'educational': return 'bg-blue-100 text-blue-800';
     case 'charity': return 'bg-green-100 text-green-800';
     case 'community': return 'bg-orange-100 text-orange-800';

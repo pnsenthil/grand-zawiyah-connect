@@ -31,11 +31,11 @@ All colors MUST be HSL.
     --accent: 84 46% 92%;         /* Light Green #E8F5E8 */
     --accent-foreground: 84 46% 15%;
 
-    /* Legacy Purple Colors */
-    --legacy: 251 69% 52%;        /* Royal Purple #6B46C1 */
+    /* Legacy Purple Colors → Updated to #6c1376 */
+    --legacy: 294 72% 27%;        /* #6c1376 */
     --legacy-foreground: 0 0% 100%;
-    --legacy-light: 243 75% 91%;  /* Light Purple #E0E7FF */
-    --legacy-dark: 251 88% 35%;   /* Deep Purple #4C1D95 */
+    --legacy-light: 294 72% 90%;  /* light tint of #6c1376 */
+    --legacy-dark: 294 72% 20%;   /* deeper shade of #6c1376 */
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -93,10 +93,10 @@ All colors MUST be HSL.
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
-    --legacy: 251 69% 65%;        /* Lighter purple for dark mode */
+    --legacy: 294 72% 40%;        /* lighter for dark mode */
     --legacy-foreground: 222.2 84% 4.9%;
-    --legacy-light: 243 75% 20%;
-    --legacy-dark: 251 88% 50%;
+    --legacy-light: 294 72% 25%;
+    --legacy-dark: 294 72% 55%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;

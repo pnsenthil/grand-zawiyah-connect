@@ -146,7 +146,7 @@ const Community = () => {
     switch (type) {
       case 'Education': return 'bg-blue-100 text-blue-800';
       case 'Social': return 'bg-green-100 text-green-800';
-      case 'Leadership': return 'bg-purple-100 text-purple-800';
+      case 'Leadership': return 'bg-legacy/10 text-legacy border border-legacy/20';
       default: return 'bg-gray-100 text-gray-800';
     }
   };

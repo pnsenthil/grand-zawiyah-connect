@@ -119,7 +119,7 @@ export function CommunityHub() {
     switch (type) {
       case 'job': return 'bg-blue-100 text-blue-800';
       case 'housing': return 'bg-green-100 text-green-800';
-      case 'scholarship': return 'bg-purple-100 text-purple-800';
+      case 'scholarship': return 'bg-legacy/10 text-legacy border border-legacy/20';
       case 'health': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }

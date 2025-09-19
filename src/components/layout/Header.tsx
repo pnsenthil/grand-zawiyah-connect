@@ -20,17 +20,17 @@ const Header = () => {
   const { user, isAuthenticated, signOut } = useAuth();
 
   const navigationItems = [
-    { label: "Home", href: "/" },
+    { label: "About Us", href: "/about" },
     { label: "Premium", href: "/lessons" },
     { label: "Donate", href: "/donate" },
     { label: "Events", href: "/events" },
     { label: "Payments", href: "/payments" },
   ];
 
-  // Add Dashboard between Home and Premium for authenticated users
+  // Add Dashboard for authenticated users
   const authenticatedNavigationItems = [
-    { label: "Home", href: "/" },
     { label: "Dashboard", href: "/dashboard" },
+    { label: "About Us", href: "/about" },
     { label: "Premium", href: "/lessons" },
     { label: "Donate", href: "/donate" },
     { label: "Events", href: "/events" },
@@ -45,14 +45,14 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-lg">GZ</span>
             </div>
             <div>
               <h1 className="text-xl font-bold" style={{ color: '#6c1376' }}>Grand Zawiyah</h1>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8" role="navigation" aria-label="Main navigation">
