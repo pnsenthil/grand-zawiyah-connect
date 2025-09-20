@@ -10,7 +10,7 @@ import {
   Filter,
   FileText,
   Video,
-  Audio,
+  Volume2,
   Image,
   Users,
   GraduationCap,
@@ -182,7 +182,7 @@ const Resources = () => {
   const getFormatIcon = (format: string) => {
     switch (format) {
       case 'Video': return <Video className="h-4 w-4" />;
-      case 'Audio': return <Audio className="h-4 w-4" />;
+      case 'Audio': return <Volume2 className="h-4 w-4" />;
       case 'Document': return <FileText className="h-4 w-4" />;
       case 'Image': return <Image className="h-4 w-4" />;
       default: return <FileText className="h-4 w-4" />;
