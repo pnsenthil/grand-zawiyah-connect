@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://grandzawiyah.org/sitemap.xml
+
+# Disallow private areas
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /api/
+Disallow: /admin/
+
+# Allow important pages
+Allow: /donate
+Allow: /lessons
+Allow: /events
+Allow: /premium
+Allow: /roundup

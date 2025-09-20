@@ -1,0 +1,20 @@
+import{t as x,u as h,r as c,j as e,C as p,a as g,p as j,b as f,d as y,H as N,B as r,a0 as w}from"./index-DvwH0SUZ.js";import{B as b}from"./badge-vNSqYqIZ.js";import{D as C}from"./download-l_SpPqco.js";import{S as v}from"./share-2-qwZKgUtz.js";const G=()=>{const[o]=x(),l=h(),[t,d]=c.useState(null);c.useEffect(()=>{const a=o.get("session_id");a&&d(a)},[o]);const m=()=>{const a=`
+GRAND ZAWIYAH CONNECT
+Payment Receipt
+
+Session ID: ${t}
+Date: ${new Date().toLocaleDateString()}
+Time: ${new Date().toLocaleTimeString()}
+Amount: $100.00
+Campaign: Grand Zawiyah Construction
+Status: Completed
+
+Thank you for your generous donation to the Grand Zawiyah Construction project. 
+Your contribution helps us build the main zawiyah for community gatherings and education.
+
+May Allah reward you abundantly for your generosity.
+
+---
+Grand Zawiyah Connect
+Building Community Through Faith
+    `.trim(),n=new Blob([a],{type:"text/plain"}),i=URL.createObjectURL(n),s=document.createElement("a");s.href=i,s.download=`donation_receipt_${t}.txt`,document.body.appendChild(s),s.click(),document.body.removeChild(s),URL.revokeObjectURL(i)},u=async()=>{const a={title:"Grand Zawiyah Connect - Donation Complete",text:"I just made a donation to support the Grand Zawiyah Construction project!",url:window.location.origin};try{navigator.share?await navigator.share(a):(await navigator.clipboard.writeText(a.text+" "+a.url),alert("Donation message copied to clipboard!"))}catch(n){console.error("Error sharing:",n)}};return e.jsx("div",{className:"min-h-screen bg-background py-8",children:e.jsx("div",{className:"container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl",children:e.jsxs(p,{className:"text-center",children:[e.jsxs(g,{className:"pb-6",children:[e.jsx("div",{className:"mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4",children:e.jsx(j,{className:"h-8 w-8 text-green-600"})}),e.jsx(f,{className:"text-2xl font-bold text-green-600",children:"Payment Successful!"}),e.jsx("p",{className:"text-muted-foreground",children:"Thank you for your generous donation to Grand Zawiyah Construction"})]}),e.jsxs(y,{className:"space-y-6",children:[e.jsxs("div",{className:"bg-green-50 border border-green-200 rounded-lg p-4",children:[e.jsxs("div",{className:"flex items-center justify-center gap-2 mb-2",children:[e.jsx(N,{className:"h-5 w-5 text-green-600"}),e.jsx("span",{className:"font-medium text-green-800",children:"Donation Details"})]}),e.jsxs("div",{className:"space-y-2 text-sm",children:[e.jsxs("div",{className:"flex justify-between",children:[e.jsx("span",{className:"text-muted-foreground",children:"Amount:"}),e.jsx("span",{className:"font-medium",children:"$100.00"})]}),e.jsxs("div",{className:"flex justify-between",children:[e.jsx("span",{className:"text-muted-foreground",children:"Campaign:"}),e.jsx("span",{className:"font-medium",children:"Grand Zawiyah Construction"})]}),e.jsxs("div",{className:"flex justify-between",children:[e.jsx("span",{className:"text-muted-foreground",children:"Status:"}),e.jsx(b,{className:"bg-green-100 text-green-800",children:"Completed"})]}),t&&e.jsxs("div",{className:"flex justify-between",children:[e.jsx("span",{className:"text-muted-foreground",children:"Session ID:"}),e.jsx("span",{className:"font-mono text-xs",children:t})]})]})]}),e.jsx("div",{className:"text-center",children:e.jsx("p",{className:"text-sm text-muted-foreground mb-4",children:"Your donation will help us build the main zawiyah for community gatherings and education. May Allah reward you abundantly for your generosity."})}),e.jsxs("div",{className:"flex flex-col sm:flex-row gap-3",children:[e.jsxs(r,{variant:"outline",onClick:m,className:"flex-1",children:[e.jsx(C,{className:"h-4 w-4 mr-2"}),"Download Receipt"]}),e.jsxs(r,{variant:"outline",onClick:u,className:"flex-1",children:[e.jsx(v,{className:"h-4 w-4 mr-2"}),"Share"]})]}),e.jsx("div",{className:"pt-4 border-t",children:e.jsxs(r,{variant:"primary",onClick:()=>l("/"),className:"w-full",children:[e.jsx(w,{className:"h-4 w-4 mr-2"}),"Return to Home"]})})]})]})})})};export{G as default};
