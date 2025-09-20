@@ -34,14 +34,9 @@ const DonationCTA = () => {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
-            <div className="inline-block mb-4">
-              <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
-                Make a Difference Today
-              </span>
-            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Your Donation Creates{" "}
               <span className="text-legacy">
@@ -54,20 +49,20 @@ const DonationCTA = () => {
             </p>
           </div>
 
-          {/* Donation Card */}
+          {/* Simplified Donation Card */}
           <Card className="card-elegant border-0 shadow-elegant">
             <CardContent className="p-8 md:p-12">
               {/* Amount Selection */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Choose Your Contribution</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <h3 className="text-lg font-semibold text-foreground mb-6 text-center">Choose Your Contribution</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {donationOptions.map((option, index) => (
                     <button
                       key={index}
-                      className={`relative p-4 rounded-xl border-2 transition-all duration-200 hover:scale-105 ${
+                      className={`relative p-6 rounded-xl border-2 transition-all duration-200 hover:scale-105 ${
                         option.popular
-                          ? 'border-primary bg-primary text-primary-foreground shadow-md'
-                          : 'border-border bg-background hover:border-primary/50'
+                          ? 'border-legacy bg-legacy text-legacy-foreground shadow-md'
+                          : 'border-border bg-background hover:border-legacy/50'
                       }`}
                     >
                       {option.popular && (
@@ -77,10 +72,10 @@ const DonationCTA = () => {
                           </span>
                         </div>
                       )}
-                      <div className={`text-xl font-bold ${option.popular ? 'text-primary-foreground' : 'text-foreground'}`}>
+                      <div className={`text-2xl font-bold ${option.popular ? 'text-legacy-foreground' : 'text-foreground'}`}>
                         {option.amount}
                       </div>
-                      <div className={`text-sm ${option.popular ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
+                      <div className={`text-sm ${option.popular ? 'text-legacy-foreground/80' : 'text-muted-foreground'}`}>
                         {option.label}
                       </div>
                     </button>
@@ -88,77 +83,11 @@ const DonationCTA = () => {
                 </div>
               </div>
 
-              {/* Custom Amount */}
-              <div className="mb-8">
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Or enter a custom amount
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
-                  <input
-                    type="number"
-                    placeholder="0.00"
-                    className="w-full pl-8 pr-4 py-3 rounded-lg border border-border bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Donation Type */}
-              <div className="mb-8">
-                <div className="flex gap-4">
-                  <button className="flex-1 p-3 rounded-lg border-2 border-primary bg-primary text-primary-foreground text-sm font-medium transition-all">
-                    Monthly Donation
-                  </button>
-                  <button className="flex-1 p-3 rounded-lg border-2 border-border bg-background hover:border-primary/50 text-sm font-medium transition-all">
-                    One-time Donation
-                  </button>
-                </div>
-              </div>
-
-              {/* Round-Up Feature */}
-              <div className="mb-8">
-                <h4 className="font-semibold text-foreground mb-4">Or Enable Round‑Up Giving</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <button className="p-4 rounded-xl border-2 border-primary/30 bg-primary/5 hover:bg-primary/10 transition-all duration-200 hover:scale-105 text-left">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-bold text-primary">$</span>
-                      </div>
-                      <span className="font-semibold text-foreground">Round‑Up</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Automatically round up purchases</p>
-                  </button>
-                  
-                  <button className="p-4 rounded-xl border-2 border-border bg-background hover:border-primary/50 transition-all duration-200 hover:scale-105 text-left">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-8 h-8 bg-secondary/20 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-bold text-secondary">$</span>
-                      </div>
-                      <span className="font-semibold text-foreground">Double Round‑Up</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Round up + match the amount</p>
-                  </button>
-                  
-                  <button className="p-4 rounded-xl border-2 border-border bg-background hover:border-primary/50 transition-all duration-200 hover:scale-105 text-left">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-8 h-8 bg-legacy/20 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-bold text-legacy">$</span>
-                      </div>
-                      <span className="font-semibold text-foreground">Custom Round‑Up</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Set your own round‑up amount</p>
-                  </button>
-                </div>
-                <p className="text-xs text-muted-foreground mt-3 text-center">
-                  Link your card to automatically donate spare change from everyday purchases
-                </p>
-              </div>
-
               {/* Benefits */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <div className="text-primary">
+                    <div className="text-legacy">
                       {benefit.icon}
                     </div>
                     <span>{benefit.text}</span>
@@ -167,9 +96,9 @@ const DonationCTA = () => {
               </div>
 
               {/* CTA Button */}
-              <Button variant="hero" size="lg" className="w-full text-lg py-6" onClick={() => navigate('/payments')}>
+              <Button variant="legacy" size="lg" className="w-full text-lg py-6" onClick={() => navigate('/donate')}>
                 <Heart className="mr-2 h-5 w-5" />
-                Donate
+                Donate Now
               </Button>
 
               {/* Trust Note */}
@@ -179,25 +108,6 @@ const DonationCTA = () => {
               </p>
             </CardContent>
           </Card>
-
-          {/* Impact Preview */}
-          <div className="mt-12 text-center">
-            <h3 className="text-xl font-semibold text-foreground mb-6">Your Impact in Numbers</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5">
-                <div className="text-2xl font-bold text-primary mb-2">$50</div>
-                <div className="text-sm text-muted-foreground">Provides 1 month of educational materials</div>
-              </div>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-legacy/10 to-legacy/5">
-                <div className="text-2xl font-bold text-legacy mb-2">$100</div>
-                <div className="text-sm text-muted-foreground">Supports 2 community events</div>
-              </div>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-secondary/10 to-secondary/5">
-                <div className="text-2xl font-bold text-secondary mb-2">$250</div>
-                <div className="text-sm text-muted-foreground">Funds a scholarship opportunity</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

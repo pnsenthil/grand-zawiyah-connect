@@ -106,7 +106,7 @@ const mockEvents: Event[] = [
   },
   {
     id: '3',
-    title: 'Community Iftar',
+    title: 'Community Iftar Gathering',
     description: 'Breaking fast together during Ramadan with the local Muslim community.',
     date: '2024-10-05',
     time: '6:30 PM', 
@@ -115,7 +115,29 @@ const mockEvents: Event[] = [
     capacity: 200,
     registered: 145,
     isOnline: false,
-    featured: true
+    featured: true,
+    organizer: 'Grand Zawiyah Community',
+    isFree: true,
+    longDescription: 'Join us for a beautiful community iftar where we break our fast together, share delicious food, and strengthen our bonds as a Muslim community. This is a time for fellowship, gratitude, and spiritual connection.',
+    agenda: [
+      { time: '6:30 PM', activity: 'Arrival and Welcome' },
+      { time: '6:45 PM', activity: 'Maghrib Prayer' },
+      { time: '7:00 PM', activity: 'Iftar Meal' },
+      { time: '7:30 PM', activity: 'Community Discussion' },
+      { time: '8:00 PM', activity: 'Isha Prayer' }
+    ],
+    benefits: [
+      'Build community connections',
+      'Experience the joy of shared meals',
+      'Participate in group prayers',
+      'Learn from community members'
+    ],
+    requirements: [
+      'Respectful behavior',
+      'Willingness to participate in prayers',
+      'Bring a dish to share (optional)'
+    ],
+    tags: ['iftar', 'ramadan', 'community', 'prayer']
   },
   {
     id: '4',
@@ -128,7 +150,105 @@ const mockEvents: Event[] = [
     capacity: 75,
     registered: 34,
     isOnline: false,
-    featured: false
+    featured: false,
+    organizer: 'Grand Zawiyah Charity',
+    isFree: true,
+    longDescription: 'Join us in supporting our brothers and sisters in Yemen by donating essential supplies, clothing, and funds. This is a great opportunity to practice charity and help those in need.',
+    agenda: [
+      { time: '10:00 AM', activity: 'Welcome and Introduction' },
+      { time: '10:15 AM', activity: 'Collection of Donations' },
+      { time: '11:30 AM', activity: 'Sorting and Packing' },
+      { time: '12:00 PM', activity: 'Dua and Closing' }
+    ],
+    benefits: [
+      'Practice charity and giving',
+      'Help those in need',
+      'Build community spirit',
+      'Learn about humanitarian work'
+    ],
+    requirements: [
+      'Bring donations if possible',
+      'Willingness to help with organization',
+      'Compassionate heart'
+    ],
+    tags: ['charity', 'yemen', 'donations', 'humanitarian']
+  },
+  {
+    id: '5',
+    title: 'Youth Leadership Summit',
+    description: 'Empowering young Muslims to become community leaders and change-makers.',
+    date: '2024-10-15',
+    time: '9:00 AM',
+    location: 'Grand Zawiyah Conference Hall',
+    type: 'educational',
+    capacity: 100,
+    registered: 78,
+    isOnline: false,
+    featured: true,
+    organizer: 'Youth Development Program',
+    cost: 15,
+    isFree: false,
+    longDescription: 'A comprehensive summit designed to develop leadership skills in young Muslims. Learn about community organizing, public speaking, project management, and how to make a positive impact in your community.',
+    agenda: [
+      { time: '9:00 AM', activity: 'Registration and Welcome' },
+      { time: '9:30 AM', activity: 'Keynote: Leadership in Islam' },
+      { time: '10:30 AM', activity: 'Workshop: Public Speaking' },
+      { time: '11:30 AM', activity: 'Break' },
+      { time: '12:00 PM', activity: 'Workshop: Project Management' },
+      { time: '1:00 PM', activity: 'Lunch and Networking' },
+      { time: '2:00 PM', activity: 'Panel Discussion' },
+      { time: '3:00 PM', activity: 'Group Projects' },
+      { time: '4:00 PM', activity: 'Presentations and Closing' }
+    ],
+    benefits: [
+      'Develop leadership skills',
+      'Network with other young leaders',
+      'Learn practical community organizing',
+      'Build confidence and communication skills'
+    ],
+    requirements: [
+      'Age 16-25',
+      'Interest in community leadership',
+      'Willingness to participate actively',
+      'Registration fee: $15'
+    ],
+    tags: ['leadership', 'youth', 'development', 'community']
+  },
+  {
+    id: '6',
+    title: 'Weekly Virtual Halaqa',
+    description: 'Join our weekly study circle focusing on Islamic jurisprudence and spiritual development.',
+    date: '2024-09-22',
+    time: '7:00 PM',
+    location: 'Online via Zoom',
+    type: 'spiritual',
+    capacity: 150,
+    registered: 89,
+    isOnline: true,
+    featured: false,
+    organizer: 'Islamic Education Center',
+    isFree: true,
+    longDescription: 'A weekly online study circle where we explore Islamic jurisprudence, spiritual development, and contemporary issues facing Muslims today. Open to all levels of knowledge.',
+    agenda: [
+      { time: '7:00 PM', activity: 'Opening Dua and Introduction' },
+      { time: '7:15 PM', activity: 'Recitation and Translation' },
+      { time: '7:45 PM', activity: 'Discussion and Q&A' },
+      { time: '8:15 PM', activity: 'Spiritual Reflection' },
+      { time: '8:30 PM', activity: 'Closing Dua' }
+    ],
+    benefits: [
+      'Deepen Islamic knowledge',
+      'Connect with scholars and students',
+      'Ask questions and get guidance',
+      'Build consistent learning habits'
+    ],
+    requirements: [
+      'Basic understanding of Islam',
+      'Access to Zoom',
+      'Willingness to participate in discussion',
+      'Respectful and open attitude'
+    ],
+    tags: ['halaqa', 'education', 'spiritual', 'online']
   }
 ];
 

@@ -4,149 +4,178 @@ import { Button } from "@/components/ui/button";
 import { 
   Users, 
   Heart, 
-  BookOpen, 
-  Globe, 
-  Star,
   MessageSquare,
-  Calendar,
-  Briefcase,
-  Home,
-  GraduationCap,
-  Handshake,
   TrendingUp,
   Award,
   ArrowRight,
   MapPin,
   Clock,
-  Phone,
-  Mail
+  Star,
+  ThumbsUp,
+  Reply,
+  Calendar
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { CommunityHub } from "@/components/community/CommunityHub";
 
 const Community = () => {
   const navigate = useNavigate();
 
   const communityStats = [
     {
-      icon: <Users className="h-8 w-8 text-green-600" />,
+      icon: <Users className="h-8 w-8 text-legacy" />,
       number: "50,000+",
       label: "Active Members",
       description: "Muslims from around the world"
     },
     {
-      icon: <Globe className="h-8 w-8 text-green-600" />,
-      number: "120+",
-      label: "Countries",
-      description: "Global community presence"
-    },
-    {
-      icon: <MessageSquare className="h-8 w-8 text-green-600" />,
+      icon: <MessageSquare className="h-8 w-8 text-legacy" />,
       number: "1,000+",
       label: "Daily Discussions",
       description: "Active conversations"
     },
     {
-      icon: <Heart className="h-8 w-8 text-green-600" />,
+      icon: <Heart className="h-8 w-8 text-legacy" />,
       number: "500+",
       label: "Volunteers",
       description: "Community service hours"
+    },
+    {
+      icon: <TrendingUp className="h-8 w-8 text-legacy" />,
+      number: "95%",
+      label: "Satisfaction Rate",
+      description: "Member satisfaction"
     }
   ];
 
-  const communityFeatures = [
-    {
-      icon: <Users className="h-6 w-6 text-green-600" />,
-      title: "Connect with Fellow Muslims",
-      description: "Build meaningful relationships with Muslims from diverse backgrounds and cultures worldwide."
-    },
-    {
-      icon: <BookOpen className="h-6 w-6 text-green-600" />,
-      title: "Share Knowledge & Resources",
-      description: "Access educational content, job opportunities, housing, scholarships, and community resources."
-    },
-    {
-      icon: <MessageSquare className="h-6 w-6 text-green-600" />,
-      title: "Engage in Discussions",
-      description: "Participate in meaningful conversations about faith, community issues, and personal growth."
-    },
-    {
-      icon: <Calendar className="h-6 w-6 text-green-600" />,
-      title: "Join Events & Activities",
-      description: "Attend virtual and local events, workshops, and community gatherings."
-    },
-    {
-      icon: <Handshake className="h-6 w-6 text-green-600" />,
-      title: "Support Each Other",
-      description: "Offer and receive help, mentorship, and support from community members."
-    },
-    {
-      icon: <Globe className="h-6 w-6 text-green-600" />,
-      title: "Global Network",
-      description: "Connect with Muslims worldwide and build an international support network."
-    }
-  ];
-
-  const successStories = [
+  const topMembers = [
     {
       name: "Amina Hassan",
+      role: "Community Moderator",
       location: "Toronto, Canada",
-      story: "Through the community, I found my dream job at an Islamic fintech company and connected with amazing sisters who became my closest friends.",
-      role: "Software Engineer",
-      image: "/api/placeholder/80/80"
+      contributions: 1250,
+      avatar: "/api/placeholder/60/60",
+      badges: ["Top Contributor", "Mentor"]
     },
     {
       name: "Omar Al-Rashid",
+      role: "Knowledge Expert",
       location: "London, UK",
-      story: "The community helped me find halal housing near my workplace and introduced me to local Islamic scholars who guided my spiritual journey.",
-      role: "Business Analyst",
-      image: "/api/placeholder/80/80"
+      contributions: 980,
+      avatar: "/api/placeholder/60/60",
+      badges: ["Scholar", "Helper"]
     },
     {
       name: "Fatima Zahra",
+      role: "Community Leader",
       location: "New York, USA",
-      story: "I received a scholarship through the community network and now volunteer to help other students find educational opportunities.",
-      role: "Student & Volunteer",
-      image: "/api/placeholder/80/80"
+      contributions: 1150,
+      avatar: "/api/placeholder/60/60",
+      badges: ["Leader", "Volunteer"]
+    },
+    {
+      name: "Ahmed Ibrahim",
+      role: "Tech Support",
+      location: "Dubai, UAE",
+      contributions: 890,
+      avatar: "/api/placeholder/60/60",
+      badges: ["Expert", "Helper"]
     }
   ];
 
-  const upcomingEvents = [
+  const discussions = [
     {
-      title: "Weekly Virtual Halaqa",
-      date: "Every Sunday, 7:00 PM EST",
-      type: "Education",
-      attendees: 150,
-      description: "Join our weekly study circle focusing on Islamic jurisprudence and spiritual development."
+      id: 1,
+      title: "How to maintain consistent prayer during busy work schedule?",
+      author: "Sarah M.",
+      authorRole: "Community Member",
+      timeAgo: "2 hours ago",
+      category: "Spiritual Growth",
+      replies: 24,
+      likes: 18,
+      isPinned: true,
+      tags: ["prayer", "work-life", "spirituality"]
     },
     {
-      title: "Community Iftar Gathering",
-      date: "March 20, 2024",
-      type: "Social",
-      attendees: 200,
-      description: "Breaking fast together as one community with delicious food and meaningful conversations."
+      id: 2,
+      title: "Best practices for teaching children about Islamic values",
+      author: "Amina K.",
+      authorRole: "Parent & Educator",
+      timeAgo: "4 hours ago",
+      category: "Family & Parenting",
+      replies: 31,
+      likes: 42,
+      isPinned: false,
+      tags: ["children", "education", "values"]
     },
     {
-      title: "Islamic Finance Workshop",
-      date: "March 25, 2024",
-      type: "Education",
-      attendees: 75,
-      description: "Learn about halal investment strategies and Islamic banking principles."
+      id: 3,
+      title: "Halal investment opportunities in 2024",
+      author: "Omar R.",
+      authorRole: "Financial Advisor",
+      timeAgo: "6 hours ago",
+      category: "Finance & Business",
+      replies: 15,
+      likes: 28,
+      isPinned: false,
+      tags: ["investment", "halal", "finance"]
     },
     {
-      title: "Youth Leadership Summit",
-      date: "April 5, 2024",
-      type: "Leadership",
-      attendees: 100,
-      description: "Empowering young Muslims to become community leaders and change-makers."
+      id: 4,
+      title: "Community iftar planning for Ramadan 2024",
+      author: "Community Team",
+      authorRole: "Event Organizer",
+      timeAgo: "1 day ago",
+      category: "Community Events",
+      replies: 45,
+      likes: 67,
+      isPinned: true,
+      tags: ["ramadan", "iftar", "community"]
+    },
+    {
+      id: 5,
+      title: "Experiences with online Islamic courses",
+      author: "Fatima A.",
+      authorRole: "Student",
+      timeAgo: "2 days ago",
+      category: "Education",
+      replies: 12,
+      likes: 19,
+      isPinned: false,
+      tags: ["online-learning", "courses", "education"]
+    },
+    {
+      id: 6,
+      title: "Mental health and spiritual well-being",
+      author: "Dr. Hassan M.",
+      authorRole: "Counselor",
+      timeAgo: "3 days ago",
+      category: "Health & Wellness",
+      replies: 38,
+      likes: 52,
+      isPinned: false,
+      tags: ["mental-health", "wellness", "spirituality"]
     }
   ];
 
-  const getEventTypeColor = (type: string) => {
-    switch (type) {
+  const categories = [
+    "All Discussions",
+    "Spiritual Growth",
+    "Family & Parenting", 
+    "Finance & Business",
+    "Community Events",
+    "Education",
+    "Health & Wellness",
+    "General"
+  ];
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'Spiritual Growth': return 'bg-legacy/10 text-legacy border border-legacy/20';
+      case 'Family & Parenting': return 'bg-pink-100 text-pink-800';
+      case 'Finance & Business': return 'bg-green-100 text-green-800';
+      case 'Community Events': return 'bg-orange-100 text-orange-800';
       case 'Education': return 'bg-blue-100 text-blue-800';
-      case 'Social': return 'bg-green-100 text-green-800';
-      case 'Leadership': return 'bg-legacy/10 text-legacy border border-legacy/20';
+      case 'Health & Wellness': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -154,43 +183,71 @@ const Community = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-100">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <Badge className="mb-4 bg-green-100 text-green-800 border-green-200">
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-legacy/5 to-legacy/10">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, #6C086F 0%, #4A0E4D 100%)',
+            backgroundImage: 'url("https://images.unsplash.com/photo-1542816417-0983c9c9ad53?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <img
+            src="https://images.unsplash.com/photo-1542816417-0983c9c9ad53?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            alt="African Muslim community gathering for prayer and discussion"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Hide image if it fails to load, background will show
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-4xl mx-auto">
+            <Badge className="mb-6 bg-legacy/20 text-legacy border border-legacy/30 backdrop-blur-sm">
               <Users className="h-4 w-4 mr-2" />
               Global Community
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Join Our{" "}
-              <span className="text-green-600">Global Muslim Community</span>
+              <span className="text-yellow-300">Community Discussions</span>
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed mb-8">
-              Connect with Muslims worldwide, share resources, engage in meaningful discussions, 
-              and support each other in our journey of faith and growth.
+            <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
+              Connect with Muslims worldwide, share knowledge, ask questions, 
+              and engage in meaningful conversations about faith, life, and community.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => document.getElementById('community-hub')?.scrollIntoView({ behavior: 'smooth' })}
+                className="bg-legacy hover:bg-legacy/90 text-white"
+                onClick={() => document.getElementById('discussions')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                <Users className="h-5 w-5 mr-2" />
-                Join Community
+                <MessageSquare className="h-5 w-5 mr-2" />
+                Start Discussion
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
               <Button 
                 size="lg" 
                 variant="outline"
-                className="border-green-600 text-green-600 hover:bg-green-50"
-                onClick={() => navigate('/volunteer')}
+                className="border-2 border-white text-white hover:bg-white hover:text-legacy bg-transparent"
+                onClick={() => navigate('/events')}
               >
-                <Heart className="h-5 w-5 mr-2" />
-                Volunteer
+                <Calendar className="h-5 w-5 mr-2" />
+                View Events
               </Button>
             </div>
           </div>
         </div>
+
+        {/* Floating decorative elements */}
+        <div className="absolute top-20 left-10 w-20 h-20 bg-legacy/20 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>
       </section>
 
       {/* Stats Section */}
@@ -199,7 +256,7 @@ const Community = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {communityStats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-legacy/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   {stat.icon}
                 </div>
                 <h3 className="text-3xl font-bold text-foreground mb-2">{stat.number}</h3>
@@ -211,233 +268,173 @@ const Community = () => {
         </div>
       </section>
 
-      {/* Community Features */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              What You Can Do in Our Community
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Discover all the ways you can connect, learn, and grow with fellow Muslims
-            </p>
-          </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Main Discussions */}
+          <div className="lg:col-span-3">
+            <div id="discussions" className="mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-foreground">Community Discussions</h2>
+                <Button variant="legacy">
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  New Discussion
+                </Button>
+              </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {communityFeatures.map((feature, index) => (
-              <Card key={index} className="border-0 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+              {/* Category Filters */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {categories.map((category) => (
+                  <Badge 
+                    key={category}
+                    variant="outline" 
+                    className="cursor-pointer hover:bg-legacy/10 hover:text-legacy"
+                  >
+                    {category}
+                  </Badge>
+                ))}
+              </div>
 
-      {/* Community Hub Component */}
-      <section id="community-hub" className="py-20 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <CommunityHub />
-        </div>
-      </section>
-
-      {/* Success Stories */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Success Stories
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Real stories from community members who found support, opportunities, and friendship
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {successStories.map((story, index) => (
-              <Card key={index} className="border-0 shadow-md hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                      <Users className="h-6 w-6 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-foreground">{story.name}</h3>
-                      <p className="text-sm text-muted-foreground">{story.role}</p>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {story.location}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed italic">
-                    "{story.story}"
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Upcoming Events */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Upcoming Community Events
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Join our regular events and special gatherings
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {upcomingEvents.map((event, index) => (
-              <Card key={index} className="border-0 shadow-md hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Calendar className="h-6 w-6 text-green-600" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-lg font-bold text-foreground">{event.title}</h3>
-                        <Badge className={getEventTypeColor(event.type)}>
-                          {event.type}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2 flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {event.date}
-                      </p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {event.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Users className="h-4 w-4" />
-                          {event.attendees} attending
+              {/* Discussions List */}
+              <div className="space-y-4">
+                {discussions.map((discussion) => (
+                  <Card key={discussion.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 bg-legacy/10 rounded-full flex items-center justify-center flex-shrink-0">
+                          <MessageSquare className="h-5 w-5 text-legacy" />
                         </div>
-                        <Button variant="outline" size="sm">
-                          RSVP
-                        </Button>
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <h3 className="text-lg font-semibold text-foreground mb-1">
+                                {discussion.title}
+                                {discussion.isPinned && (
+                                  <Badge variant="secondary" className="ml-2">Pinned</Badge>
+                                )}
+                              </h3>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                                <span>By {discussion.author} • {discussion.authorRole}</span>
+                                <span>•</span>
+                                <span>{discussion.timeAgo}</span>
+                              </div>
+                            </div>
+                            <Badge className={getCategoryColor(discussion.category)}>
+                              {discussion.category}
+                            </Badge>
+                          </div>
+                          
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                            <div className="flex items-center gap-1">
+                              <Reply className="h-4 w-4" />
+                              {discussion.replies} replies
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <ThumbsUp className="h-4 w-4" />
+                              {discussion.likes} likes
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-wrap gap-1">
+                            {discussion.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                #{tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Community Guidelines */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Community Guidelines
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our shared values and principles that keep our community strong and welcoming
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="text-center border-0 shadow-md">
-              <CardContent className="p-6">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-foreground mb-2">Respect</h3>
-                <p className="text-sm text-muted-foreground">
-                  Treat all members with kindness and respect, regardless of background or beliefs.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center border-0 shadow-md">
-              <CardContent className="p-6">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <BookOpen className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-foreground mb-2">Learning</h3>
-                <p className="text-sm text-muted-foreground">
-                  Share knowledge constructively and be open to learning from others.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center border-0 shadow-md">
-              <CardContent className="p-6">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Handshake className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-foreground mb-2">Support</h3>
-                <p className="text-sm text-muted-foreground">
-                  Offer help when you can and seek support when you need it.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center border-0 shadow-md">
-              <CardContent className="p-6">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-foreground mb-2">Excellence</h3>
-                <p className="text-sm text-muted-foreground">
-                  Strive for excellence in all your contributions to the community.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-green-600 to-emerald-600">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Ready to Join Our Community?
-            </h2>
-            <p className="text-xl text-green-100 mb-8 leading-relaxed">
-              Connect with Muslims worldwide, share resources, and grow together in faith and service.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-white text-green-600 hover:bg-green-50"
-                onClick={() => document.getElementById('community-hub')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                <Users className="h-5 w-5 mr-2" />
-                Join Community Now
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-2 border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
-                onClick={() => navigate('/about')}
-              >
-                <BookOpen className="h-5 w-5 mr-2" />
-                Learn More
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Top Members */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Award className="h-5 w-5 text-legacy" />
+                  Top Members
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {topMembers.map((member, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-legacy/10 rounded-full flex items-center justify-center">
+                        <Users className="h-5 w-5 text-legacy" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-medium text-sm">{member.name}</h4>
+                        <p className="text-xs text-muted-foreground">{member.role}</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Star className="h-3 w-3 text-yellow-500" />
+                          <span className="text-xs text-muted-foreground">{member.contributions} contributions</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button variant="outline" className="w-full justify-start">
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Start Discussion
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Users className="h-4 w-4 mr-2" />
+                  Find Members
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  View Events
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Heart className="h-4 w-4 mr-2" />
+                  Volunteer
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Community Guidelines */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Community Guidelines</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-2">
+                    <Heart className="h-4 w-4 text-legacy mt-0.5" />
+                    <span>Be respectful and kind to all members</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <MessageSquare className="h-4 w-4 text-legacy mt-0.5" />
+                    <span>Share knowledge constructively</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Users className="h-4 w-4 text-legacy mt-0.5" />
+                    <span>Support and help each other</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Award className="h-4 w-4 text-legacy mt-0.5" />
+                    <span>Strive for excellence in contributions</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </section>
+      </div>
     </>
   );
 };

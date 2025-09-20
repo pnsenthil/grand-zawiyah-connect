@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { Users, Heart, Globe, BookOpen } from "lucide-react";
+import { Users, Heart, Globe, BookOpen, TrendingUp, Award, Target, GraduationCap, Cross, Home } from "lucide-react";
 
-interface StatCardProps {
+interface FeatureCardProps {
   icon: React.ReactNode;
-  value: string;
-  label: string;
+  title: string;
+  description: string;
   delay?: number;
 }
 
-const StatCard = ({ icon, value, label, delay = 0 }: StatCardProps) => {
+const FeatureCard = ({ icon, title, description, delay = 0 }: FeatureCardProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -17,78 +17,102 @@ const StatCard = ({ icon, value, label, delay = 0 }: StatCardProps) => {
   }, [delay]);
 
   return (
-    <div className={`text-center transform transition-all duration-700 ${
+    <div className={`transform transition-all duration-700 ${
       isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
     }`}>
-      <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-elegant">
-        <div className="text-primary-foreground">
-          {icon}
+      <div className="bg-legacy rounded-lg border border-legacy-dark/30 p-6 hover:bg-legacy-dark transition-all duration-300">
+        <div className="flex items-start space-x-4">
+          <div className="w-12 h-12 bg-white/15 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="text-white">
+              {icon}
+            </div>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
+            <p className="text-white/90 text-sm leading-relaxed">{description}</p>
+          </div>
         </div>
-      </div>
-      <div className="counter-animate">
-        <div className="text-3xl md:text-4xl font-bold text-foreground mb-2">{value}</div>
-        <div className="text-muted-foreground font-medium">{label}</div>
       </div>
     </div>
   );
 };
 
 const StatsSection = () => {
-  const stats = [
+  const features = [
     {
-      icon: <Heart className="h-8 w-8" />,
-      value: "450+",
-      label: "Events Completed",
+      icon: <GraduationCap className="h-6 w-6" />,
+      title: "Education for All",
+      description: "Grand Zawiyah is dedicated to ensuring that every seeker has access to authentic Islamic knowledge and spiritual guidance.",
       delay: 100,
     },
     {
-      icon: <Globe className="h-8 w-8" />,
-      value: "34+",
-      label: "Countries Reached",
+      icon: <Heart className="h-6 w-6" />,
+      title: "Community Wellness",
+      description: "Our strong commitment to spiritual and community wellness extends across global borders, nurturing hearts and minds.",
       delay: 200,
     },
     {
-      icon: <Users className="h-8 w-8" />,
-      value: "24K+",
-      label: "Community Members",
+      icon: <Home className="h-6 w-6" />,
+      title: "Crisis Support",
+      description: "In times of need, Grand Zawiyah responds swiftly to provide spiritual guidance, community support, and charitable relief.",
       delay: 300,
-    },
-    {
-      icon: <BookOpen className="h-8 w-8" />,
-      value: "1000+",
-      label: "Lessons Shared",
-      delay: 400,
     },
   ];
 
   return (
-    <section className="py-16 bg-background">
+    <section className="py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Our Global Impact
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Through the grace of Allah, we continue to grow and serve the ummah worldwide, 
-            following the teachings and legacy of our beloved scholars.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {stats.map((stat, index) => (
-            <StatCard
-              key={index}
-              icon={stat.icon}
-              value={stat.value}
-              label={stat.label}
-              delay={stat.delay}
-            />
-          ))}
-        </div>
-        
-        {/* Decorative Islamic pattern */}
-        <div className="mt-16 flex justify-center">
-          <div className="w-32 h-1 bg-legacy rounded-full opacity-60"></div>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
+          {/* Left Column - Mission Statement and Feature Cards */}
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
+                The mission of our organization
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                At Grand Zawiyah, we prioritize transparency, integrity, and inclusivity. These values guide our actions as we work tirelessly to bridge the gap between seekers of knowledge and authentic Islamic teachings.
+              </p>
+            </div>
+            
+            <div className="space-y-6">
+              {features.map((feature, index) => (
+                <FeatureCard
+                  key={index}
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                  delay={feature.delay}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column - Supporting Image */}
+          <div className="relative h-full">
+            <div className="relative h-full rounded-2xl overflow-hidden shadow-2xl">
+              <img
+                src="/donation.png"
+                alt="Hands placing items into a donation box"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              
+              {/* Overlay content */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                      <Heart className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-foreground font-semibold">Support Our Mission</p>
+                      <p className="text-muted-foreground text-sm">Your sadaqah impacts lives</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

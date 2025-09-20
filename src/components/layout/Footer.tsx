@@ -62,8 +62,8 @@ const Footer = () => {
                 { label: "About Us", href: "/about" },
                 { label: "Mission & Vision", href: "/about#mission" },
                 { label: "History & Lineage", href: "/about#history" },
-                { label: "Community Events", href: "/community" },
-                { label: "Volunteer", href: "/volunteer" },
+                { label: "Premium Lessons", href: "/lessons" },
+                { label: "Donate", href: "/donate" },
                 { label: "Contact", href: "/contact" },
               ].map((link) => (
                 <li key={link.label}>

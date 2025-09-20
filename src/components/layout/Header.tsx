@@ -7,9 +7,12 @@ import {
   DropdownMenuContent, 
   DropdownMenuItem, 
   DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger
 } from "@/components/ui/dropdown-menu";
-import { Menu, X, User, Settings, LogOut } from "lucide-react";
+import { Menu, X, User, Settings, LogOut, ChevronDown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
@@ -21,20 +24,36 @@ const Header = () => {
 
   const navigationItems = [
     { label: "About Us", href: "/about" },
-    { label: "Premium", href: "/lessons" },
+    { label: "Members", href: "/lessons" },
     { label: "Donate", href: "/donate" },
-    { label: "Events", href: "/events" },
-    { label: "Payments", href: "/payments" },
+    { 
+      label: "Community", 
+      href: "/community",
+      hasSubmenu: true,
+      submenu: [
+        { label: "Events", href: "/events" },
+        { label: "Resources", href: "/resources" },
+        { label: "Volunteer", href: "/volunteer" }
+      ]
+    },
   ];
 
   // Add Dashboard for authenticated users
   const authenticatedNavigationItems = [
     { label: "Dashboard", href: "/dashboard" },
     { label: "About Us", href: "/about" },
-    { label: "Premium", href: "/lessons" },
+    { label: "Members", href: "/lessons" },
     { label: "Donate", href: "/donate" },
-    { label: "Events", href: "/events" },
-    { label: "Payments", href: "/payments" },
+    { 
+      label: "Community", 
+      href: "/community",
+      hasSubmenu: true,
+      submenu: [
+        { label: "Events", href: "/events" },
+        { label: "Resources", href: "/resources" },
+        { label: "Volunteer", href: "/volunteer" }
+      ]
+    },
   ];
 
   return (
@@ -50,7 +69,7 @@ const Header = () => {
               <span className="text-primary-foreground font-bold text-lg">GZ</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold" style={{ color: '#6c1376' }}>Grand Zawiyah</h1>
+              <h1 className="text-xl font-bold text-legacy">Grand Zawiyah</h1>
             </div>
           </Link>
 
@@ -60,6 +79,41 @@ const Header = () => {
               const isActive = location.pathname === item.href || 
                 (item.href === "/" && location.pathname === "/") ||
                 (item.href !== "/" && location.pathname.startsWith(item.href));
+              
+              if (item.hasSubmenu) {
+                return (
+                  <DropdownMenu key={item.label}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className={`text-sm font-medium transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-legacy focus-visible:outline-offset-2 ${
+                          isActive 
+                            ? "text-legacy-dark font-bold text-base underline decoration-2 underline-offset-4" 
+                            : "text-legacy hover:text-legacy-dark"
+                        }`}
+                      >
+                        {item.label}
+                        <ChevronDown className="ml-1 h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-48">
+                      <DropdownMenuItem asChild>
+                        <Link to={item.href} className="w-full">
+                          Community Hub
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      {item.submenu?.map((subItem) => (
+                        <DropdownMenuItem key={subItem.label} asChild>
+                          <Link to={subItem.href} className="w-full">
+                            {subItem.label}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                );
+              }
               
               return (
                 <Link
@@ -160,6 +214,37 @@ const Header = () => {
                 const isActive = location.pathname === item.href || 
                   (item.href === "/" && location.pathname === "/") ||
                   (item.href !== "/" && location.pathname.startsWith(item.href));
+                
+                if (item.hasSubmenu) {
+                  return (
+                    <div key={item.label} className="space-y-2">
+                      <Link
+                        to={item.href}
+                        className={`text-base font-medium transition-colors px-3 py-2 rounded-md hover:bg-accent focus-visible:outline-2 focus-visible:outline-legacy focus-visible:outline-offset-2 ${
+                          isActive 
+                            ? "text-legacy-dark font-bold bg-legacy/10 border-l-4 border-legacy" 
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                        onClick={() => setIsMenuOpen(false)}
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {item.label}
+                      </Link>
+                      <div className="ml-4 space-y-1">
+                        {item.submenu?.map((subItem) => (
+                          <Link
+                            key={subItem.label}
+                            to={subItem.href}
+                            className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-1 rounded-md hover:bg-accent block"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {subItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
                 
                 return (
                   <Link

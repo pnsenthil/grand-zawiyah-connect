@@ -20,13 +20,13 @@ const Donate = lazy(() => import("./pages/Donate"));
 const Premium = lazy(() => import("./pages/Premium"));
 const Events = lazy(() => import("./pages/Events"));
 const Auth = lazy(() => import("./pages/Auth"));
-const Payments = lazy(() => import("./pages/Payments"));
 const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 const PremiumPricing = lazy(() => import("./pages/PremiumPricing"));
 const About = lazy(() => import("./pages/About"));
 const Volunteer = lazy(() => import("./pages/Volunteer"));
 const BODMessage = lazy(() => import("./pages/BODMessage"));
 const Community = lazy(() => import("./pages/Community"));
+const Resources = lazy(() => import("./pages/Resources"));
 const PremiumPayments = lazy(() => import("./pages/PremiumPayments"));
 const PremiumConfirmation = lazy(() => import("./pages/PremiumConfirmation"));
 const PremiumSuccess = lazy(() => import("./pages/PremiumSuccess"));
@@ -55,13 +55,14 @@ const App = () => {
               <Route path="/premium" element={<ProtectedRoute><Layout><Premium /></Layout></ProtectedRoute>} />
               <Route path="/donate" element={<Layout><Donate /></Layout>} />
               <Route path="/events" element={<Layout><Events /></Layout>} />
-              <Route path="/payments" element={<Layout><Payments /></Layout>} />
+              <Route path="/payments" element={<Layout><Donate /></Layout>} />
               <Route path="/donate/success" element={<Layout><PaymentSuccess /></Layout>} />
               <Route path="/premium-pricing" element={<Layout><PremiumPricing /></Layout>} />
               <Route path="/about" element={<Layout><About /></Layout>} />
               <Route path="/volunteer" element={<Layout><Volunteer /></Layout>} />
               <Route path="/bod-message" element={<Layout><BODMessage /></Layout>} />
               <Route path="/community" element={<Layout><Community /></Layout>} />
+              <Route path="/resources" element={<Layout><Resources /></Layout>} />
               <Route path="/premium-payments" element={<ProtectedRoute><Layout><PremiumPayments /></Layout></ProtectedRoute>} />
               <Route path="/premium-confirmation" element={<ProtectedRoute><Layout><PremiumConfirmation /></Layout></ProtectedRoute>} />
               <Route path="/premium-success" element={<ProtectedRoute><Layout><PremiumSuccess /></Layout></ProtectedRoute>} />

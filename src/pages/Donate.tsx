@@ -1,20 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, CreditCard, Calendar, Target, Users, Clock } from "lucide-react";
+import { Heart, CreditCard, Shield, CheckCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import PaymentForm from "@/components/payment/PaymentForm";
-import PaymentSuccess from "@/components/payment/PaymentSuccess";
-import DonationAuthModal from "@/components/ui/DonationAuthModal";
-import { useDonationTracking } from "@/hooks/useAnalytics";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import StripeCheckout from "@/components/payment/StripeCheckout";
+import StripeSubscription from "@/components/payment/StripeSubscription";
 import { useAuth } from "@/contexts/AuthContext";
 
-const predefinedAmounts = [25, 50, 100, 250, 500, 1000];
+const predefinedAmounts = [25, 50, 100, 250, 500];
 
 const campaigns = [
   {
@@ -43,17 +41,19 @@ const campaigns = [
   }
 ];
 
-const DonationForm = ({ onProceedToPayment }: { onProceedToPayment: (data: any) => void }) => {
+const Donate = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [activeTab, setActiveTab] = useState("one-time");
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState('');
-  const [frequency, setFrequency] = useState('one-time');
   const [selectedCampaign, setSelectedCampaign] = useState('zawiyah');
-  const { trackDonationFunnel, trackAmount } = useDonationTracking();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount);
     setCustomAmount('');
-    trackAmount(amount);
   };
 
   const handleCustomAmountChange = (value: string) => {
@@ -65,374 +65,304 @@ const DonationForm = ({ onProceedToPayment }: { onProceedToPayment: (data: any) 
     return selectedAmount || parseFloat(customAmount) || 0;
   };
 
-  const handleProceed = () => {
-    const selectedCampaignData = campaigns.find(c => c.id === selectedCampaign);
-    const amount = getCurrentAmount();
-    
-    trackDonationFunnel('payment_form', {
-      amount,
-      frequency,
-      campaign: selectedCampaignData?.name || 'General Fund'
-    });
-    
-    onProceedToPayment({
-      amount,
-      frequency: frequency as 'one-time' | 'monthly' | 'annual',
-      campaign: selectedCampaignData?.name || 'General Fund'
-    });
+  const handleCheckoutSuccess = (sessionId: string) => {
+    setSuccessMessage(`Payment processed successfully! Transaction ID: ${sessionId}`);
+    setErrorMessage("");
   };
+
+  const handleCheckoutError = (error: string) => {
+    setErrorMessage(`Payment failed: ${error}`);
+    setSuccessMessage("");
+  };
+
+  const handleSubscriptionSuccess = (subscriptionId: string) => {
+    setSuccessMessage(`Recurring donation set up successfully! Subscription ID: ${subscriptionId}`);
+    setErrorMessage("");
+  };
+
+  const handleSubscriptionError = (error: string) => {
+    setErrorMessage(`Subscription setup failed: ${error}`);
+    setSuccessMessage("");
+  };
+
+  const clearMessages = () => {
+    setSuccessMessage("");
+    setErrorMessage("");
+  };
+
+  const selectedCampaignData = campaigns.find(c => c.id === selectedCampaign);
 
   return (
-    <Card className="p-6">
-      <h3 className="text-xl font-semibold mb-6">Make a Donation</h3>
-      
-      {/* Campaign Selection */}
-      <div className="mb-6">
-        <Label className="text-base font-medium mb-3 block">Choose Campaign</Label>
-        <Select value={selectedCampaign} onValueChange={setSelectedCampaign}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {campaigns.map(campaign => (
-              <SelectItem key={campaign.id} value={campaign.id}>
-                {campaign.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Amount Selection */}
-      <div className="mb-6">
-        <Label className="text-base font-medium mb-3 block">Donation Amount</Label>
-        <div className="grid grid-cols-3 gap-3 mb-4">
-          {predefinedAmounts.map(amount => (
-            <Button
-              key={amount}
-              variant={selectedAmount === amount ? "primary" : "outline"}
-              onClick={() => handleAmountSelect(amount)}
-              className="h-12"
-            >
-              ${amount}
-            </Button>
-          ))}
-        </div>
-        <div>
-          <Input
-            placeholder="Custom amount"
-            value={customAmount}
-            onChange={(e) => handleCustomAmountChange(e.target.value)}
-            type="number"
-            min="1"
-          />
-        </div>
-      </div>
-
-      {/* Frequency Selection */}
-      <div className="mb-6">
-        <Label className="text-base font-medium mb-3 block">Donation Frequency</Label>
-        <Tabs value={frequency} onValueChange={setFrequency}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="one-time">One-time</TabsTrigger>
-            <TabsTrigger value="monthly">Monthly</TabsTrigger>
-            <TabsTrigger value="annual">Annual</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
-
-      {/* Impact Preview */}
-      {getCurrentAmount() > 0 && (
-        <div className="mb-6 p-4 bg-accent rounded-lg">
-          <h4 className="font-medium text-accent-foreground mb-2">Your Impact</h4>
-          <p className="text-sm text-muted-foreground">
-            Your ${getCurrentAmount()} {frequency === 'monthly' ? 'monthly' : frequency === 'annual' ? 'annual' : ''} donation will help:
-          </p>
-          <ul className="text-sm text-muted-foreground mt-2 space-y-1">
-            <li>• Support community programs and education</li>
-            <li>• Maintain zawiyah facilities and resources</li>
-            <li>• Provide assistance to families in need</li>
-          </ul>
-        </div>
-      )}
-
-      <Button 
-        variant="primary" 
-        size="lg" 
-        className="w-full" 
-        disabled={getCurrentAmount() === 0}
-        onClick={handleProceed}
-      >
-        <CreditCard className="h-5 w-5 mr-2" />
-        Proceed to Payment
-      </Button>
-    </Card>
-  );
-};
-
-const CampaignCard = ({ campaign, onDonate }: { campaign: typeof campaigns[0]; onDonate: (campaign: typeof campaigns[0]) => void }) => {
-  const progressPercentage = (campaign.raised / campaign.goal) * 100;
-
-  return (
-    <Card className="p-6 card-elegant">
-      <h3 className="text-xl font-semibold mb-2">{campaign.name}</h3>
-      <p className="text-muted-foreground mb-4">{campaign.description}</p>
-      
-      <div className="mb-4">
-        <div className="flex justify-between text-sm mb-2">
-          <span className="font-medium">${campaign.raised.toLocaleString()} raised</span>
-          <span className="text-muted-foreground">${campaign.goal.toLocaleString()} goal</span>
-        </div>
-        <div className="w-full bg-muted rounded-full h-3">
-          <div 
-            className="bg-gradient-primary h-3 rounded-full transition-all duration-300"
-            style={{ width: `${Math.min(progressPercentage, 100)}%` }}
-          />
-        </div>
-        <div className="flex justify-between text-sm mt-2">
-          <span className="text-primary font-medium">{progressPercentage.toFixed(1)}% complete</span>
-          <span className="text-muted-foreground">{campaign.donors} donors</span>
-        </div>
-      </div>
-      
-      <Button variant="primary" className="w-full" onClick={() => onDonate(campaign)}>
-        <Heart className="h-4 w-4 mr-2" />
-        Donate Now
-      </Button>
-    </Card>
-  );
-};
-
-const Donate = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [paymentData, setPaymentData] = useState<any>(null);
-  const [successData, setSuccessData] = useState<any>(null);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [pendingDonation, setPendingDonation] = useState<any>(null);
-  const { trackDonationFunnel, trackSuccess, trackFailure } = useDonationTracking();
-
-  const handleProceedToPayment = (data: any) => {
-    setPaymentData(data);
-    setShowPaymentForm(true);
-  };
-
-  const handlePaymentSuccess = (result: any) => {
-    setSuccessData(result);
-    setShowPaymentForm(false);
-    setShowSuccess(true);
-    
-    // Track successful donation
-    trackSuccess(
-      result.amount,
-      'USD',
-      paymentData?.campaign || 'General Fund',
-      result.transactionId
-    );
-  };
-
-  const handlePaymentError = (error: string) => {
-    alert(`Payment failed: ${error}`);
-    
-    // Track failed donation
-    trackFailure(
-      paymentData?.amount || 0,
-      'USD',
-      paymentData?.campaign || 'General Fund',
-      error
-    );
-  };
-
-  const handleCloseSuccess = () => {
-    setShowSuccess(false);
-    setShowPaymentForm(false);
-    setPaymentData(null);
-    setSuccessData(null);
-  };
-
-  const handleDonate = (campaign: typeof campaigns[0]) => {
-    if (isAuthenticated) {
-      // User is logged in, proceed directly to payments
-      navigate('/payments', { 
-        state: { 
-          campaign: campaign,
-          amount: null, // No default amount - let user input
-          description: `Donation to ${campaign.name}`,
-          type: 'donation'
-        } 
-      });
-    } else {
-      // User is not logged in, show auth modal
-      setPendingDonation(campaign);
-      setShowAuthModal(true);
-    }
-  };
-
-  const handleLogin = () => {
-    setShowAuthModal(false);
-    navigate('/auth');
-  };
-
-  const handleContinueAsGuest = () => {
-    setShowAuthModal(false);
-    if (pendingDonation) {
-      navigate('/payments', { 
-        state: { 
-          campaign: pendingDonation,
-          amount: null,
-          description: `Donation to ${pendingDonation.name}`,
-          type: 'donation'
-        } 
-      });
-    }
-    setPendingDonation(null);
-  };
-
-  const handleCloseAuthModal = () => {
-    setShowAuthModal(false);
-    setPendingDonation(null);
-  };
-
-  if (showPaymentForm && paymentData) {
-    return (
-      <div className="min-h-screen bg-background py-8">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Complete Your Donation</h1>
-            <p className="text-muted-foreground">
-              Secure payment processing for your ${paymentData.amount} donation
-            </p>
-          </div>
-          <PaymentForm
-            amount={paymentData.amount}
-            frequency={paymentData.frequency}
-            campaign={paymentData.campaign}
-            onSuccess={handlePaymentSuccess}
-            onError={handlePaymentError}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  if (showSuccess && successData) {
-    return (
-      <PaymentSuccess
-        transactionId={successData.transactionId}
-        amount={successData.amount}
-        campaign={paymentData?.campaign || 'General Fund'}
-        onClose={handleCloseSuccess}
-      />
-    );
-  }
-
-  return (
-    <>
-      {/* Header */}
-      <section className="py-16 bg-gradient-hero text-primary-foreground">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+    <div className="min-h-screen bg-background py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+        {/* Header */}
+        <div className="mb-8">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className="mb-4 flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Home
+          </Button>
+          
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-foreground mb-4">
               Support Our Mission
             </h1>
-            <p className="text-xl md:text-2xl mb-8 opacity-90">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Help us build the Grand Zawiyah and continue spreading the teachings of Islam
             </p>
-            <div className="flex flex-wrap justify-center gap-4 text-lg">
-              <Badge variant="secondary" className="px-4 py-2">
-                <Target className="h-5 w-5 mr-2" />
-                Goal: $750,000
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <Users className="h-5 w-5 mr-2" />
-                579 Donors
-              </Badge>
-              <Badge variant="secondary" className="px-4 py-2">
-                <Clock className="h-5 w-5 mr-2" />
-                6 Months Left
-              </Badge>
-            </div>
           </div>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <section className="py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Donation Form */}
-            <div className="lg:col-span-1">
-              <DonationForm onProceedToPayment={handleProceedToPayment} />
-              
-              {/* Quick Stats */}
-              <Card className="p-6 mt-6">
-                <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
+        {/* Trust Indicators */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <Card className="text-center">
+            <CardContent className="pt-4">
+              <Shield className="h-6 w-6 mx-auto mb-2 text-legacy" />
+              <h3 className="font-semibold text-sm">Secure</h3>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-4">
+              <CheckCircle className="h-6 w-6 mx-auto mb-2 text-legacy" />
+              <h3 className="font-semibold text-sm">Tax Deductible</h3>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-4">
+              <Heart className="h-6 w-6 mx-auto mb-2 text-legacy" />
+              <h3 className="font-semibold text-sm">Transparent</h3>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-4">
+              <CreditCard className="h-6 w-6 mx-auto mb-2 text-legacy" />
+              <h3 className="font-semibold text-sm">Instant</h3>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Messages */}
+        {(successMessage || errorMessage) && (
+          <div className="mb-6">
+            {successMessage && (
+              <Alert className="mb-2">
+                <CheckCircle className="h-4 w-4" />
+                <AlertDescription>{successMessage}</AlertDescription>
+              </Alert>
+            )}
+            {errorMessage && (
+              <Alert variant="destructive" className="mb-2">
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
+            )}
+            <Button variant="outline" size="sm" onClick={clearMessages}>
+              Clear Messages
+            </Button>
+          </div>
+        )}
+
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Left Column - Donation Form */}
+          <div>
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Make a Donation</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Campaign Selection */}
+                <div>
+                  <Label className="text-base font-medium mb-3 block">Choose Campaign</Label>
+                  <select 
+                    value={selectedCampaign} 
+                    onChange={(e) => setSelectedCampaign(e.target.value)}
+                    className="w-full p-3 border border-border rounded-lg bg-background"
+                  >
+                    {campaigns.map(campaign => (
+                      <option key={campaign.id} value={campaign.id}>
+                        {campaign.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Amount Selection */}
+                <div>
+                  <Label className="text-base font-medium mb-3 block">Donation Amount</Label>
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    {predefinedAmounts.map(amount => (
+                      <Button
+                        key={amount}
+                        variant={selectedAmount === amount ? "legacy" : "outline"}
+                        onClick={() => handleAmountSelect(amount)}
+                        className="h-12"
+                      >
+                        ${amount}
+                      </Button>
+                    ))}
+                  </div>
+                  <Input
+                    placeholder="Custom amount"
+                    value={customAmount}
+                    onChange={(e) => handleCustomAmountChange(e.target.value)}
+                    type="number"
+                    min="1"
+                  />
+                </div>
+
+                {/* Impact Preview */}
+                {getCurrentAmount() > 0 && (
+                  <div className="p-4 bg-legacy/5 rounded-lg border border-legacy/20">
+                    <h4 className="font-medium text-legacy mb-2">Your Impact</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Your ${getCurrentAmount()} donation will help support community programs and education.
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Campaign Progress */}
+            {selectedCampaignData && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">{selectedCampaignData.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">{selectedCampaignData.description}</p>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium">${selectedCampaignData.raised.toLocaleString()} raised</span>
+                      <span className="text-muted-foreground">${selectedCampaignData.goal.toLocaleString()} goal</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-legacy h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min((selectedCampaignData.raised / selectedCampaignData.goal) * 100, 100)}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-legacy font-medium">
+                        {((selectedCampaignData.raised / selectedCampaignData.goal) * 100).toFixed(1)}% complete
+                      </span>
+                      <span className="text-muted-foreground">{selectedCampaignData.donors} donors</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Right Column - Payment Options */}
+          <div>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="one-time" className="flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  One-time
+                </TabsTrigger>
+                <TabsTrigger value="recurring" className="flex items-center gap-2">
+                  <Heart className="h-4 w-4" />
+                  Recurring
+                </TabsTrigger>
+              </TabsList>
+
+              {/* One-time Donation */}
+              <TabsContent value="one-time" className="space-y-6">
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-foreground mb-2">
+                    One-time Donation
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Support our mission with a single, secure payment
+                  </p>
+                </div>
+                
+                <StripeCheckout
+                  amount={getCurrentAmount()}
+                  description={`Donation to ${selectedCampaignData?.name || 'Grand Zawiyah'}`}
+                  onSuccess={handleCheckoutSuccess}
+                  onError={handleCheckoutError}
+                  onCancel={() => setActiveTab("recurring")}
+                  allowAmountChange={true}
+                  campaign={selectedCampaignData ? {
+                    name: selectedCampaignData.name,
+                    description: selectedCampaignData.description
+                  } : undefined}
+                />
+              </TabsContent>
+
+              {/* Recurring Donation */}
+              <TabsContent value="recurring" className="space-y-6">
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-foreground mb-2">
+                    Recurring Support
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Provide consistent support with monthly donations
+                  </p>
+                </div>
+                
+                <StripeSubscription
+                  onSuccess={handleSubscriptionSuccess}
+                  onError={handleSubscriptionError}
+                  onCancel={() => setActiveTab("one-time")}
+                  planData={{
+                    amount: getCurrentAmount(),
+                    description: `Monthly donation to ${selectedCampaignData?.name || 'Grand Zawiyah'}`,
+                    type: 'donation'
+                  }}
+                />
+              </TabsContent>
+            </Tabs>
+
+            {/* Benefits */}
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="h-5 w-5" />
+                  Why Donate?
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
                 <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">This Month</span>
-                    <span className="font-medium">$12,450</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Raised</span>
-                    <span className="font-medium">$248,000</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Avg. Donation</span>
-                    <span className="font-medium">$86</span>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Campaign Cards */}
-            <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold mb-6">Active Campaigns</h2>
-              <div className="space-y-6">
-                {campaigns.map(campaign => (
-                  <CampaignCard key={campaign.id} campaign={campaign} onDonate={handleDonate} />
-                ))}
-              </div>
-              
-              {/* Recurring Donation Benefits */}
-              <Card className="p-6 mt-8 bg-gradient-accent">
-                <h3 className="text-xl font-semibold mb-4">Why Choose Recurring Donations?</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                      <Calendar className="h-4 w-4 text-primary-foreground" />
+                    <div className="w-6 h-6 bg-legacy/20 rounded-full flex items-center justify-center mt-0.5">
+                      <Heart className="h-3 w-3 text-legacy" />
                     </div>
                     <div>
-                      <h4 className="font-medium">Consistent Impact</h4>
-                      <p className="text-sm text-muted-foreground">Regular support helps us plan long-term projects</p>
+                      <h4 className="font-medium text-sm">Sadaqah Jariyah</h4>
+                      <p className="text-xs text-muted-foreground">Create lasting charity that continues to benefit the community</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                      <Heart className="h-4 w-4 text-primary-foreground" />
+                    <div className="w-6 h-6 bg-legacy/20 rounded-full flex items-center justify-center mt-0.5">
+                      <Shield className="h-3 w-3 text-legacy" />
                     </div>
                     <div>
-                      <h4 className="font-medium">Automatic Giving</h4>
-                      <p className="text-sm text-muted-foreground">Set it once and continue your charitable impact</p>
+                      <h4 className="font-medium text-sm">Tax Deductible</h4>
+                      <p className="text-xs text-muted-foreground">All donations are tax-deductible with receipt provided</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-legacy/20 rounded-full flex items-center justify-center mt-0.5">
+                      <CheckCircle className="h-3 w-3 text-legacy" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-sm">Transparent</h4>
+                      <p className="text-xs text-muted-foreground">See exactly how your donation is used</p>
                     </div>
                   </div>
                 </div>
-              </Card>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </section>
-
-      {/* Authentication Modal */}
-      <DonationAuthModal
-        isOpen={showAuthModal}
-        onClose={handleCloseAuthModal}
-        onLogin={handleLogin}
-        onContinueAsGuest={handleContinueAsGuest}
-        campaign={pendingDonation}
-      />
-    </>
+      </div>
+    </div>
   );
 };
 
